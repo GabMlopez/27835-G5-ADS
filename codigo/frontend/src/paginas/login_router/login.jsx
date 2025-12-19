@@ -1,106 +1,123 @@
 import { useState } from "react";
 import { useAuth } from "../../context/auth_context";
 import { useNavigate } from "react-router-dom";
-import { login_consulta  }  from "../../servicios/login_servicios";
+import { login_consulta } from "../../servicios/login_servicios";
+import InputField from "../../componentes/login/input_component.jsx";
+
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [username, set_username] = useState("");
+  const [password, set_password] = useState("");
+  const [loading, set_loading] = useState(false);
+  const [error_msg, set_error_msg] = useState("");
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handle_submit = async (e) => {
     e.preventDefault();
+
     if (!username.trim() || !password.trim()) {
-      setErrorMsg("Por favor, completa todos los campos.");
+      set_error_msg("Por favor, completa todos los campos.");
       return;
     }
-    setErrorMsg("");
-    setLoading(true);
+
+    set_error_msg("");
+    set_loading(true);
+
     try {
       const res = await login_consulta(username, password);
+
+      if (!res.ok) {
+        const err = await res.json();
+        set_error_msg(err.message || "Error en el inicio de sesión");
+        return;
+      }
+
       const data = await res.json();
       login(data.token, data.user);
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      console.error(err);
-      setErrorMsg("Error de conexión al servidor");
+      console.error("Error de conexión:", err);
+      set_error_msg("No se pudo conectar al servidor");
     } finally {
-      setLoading(false);
+      set_loading(false);
     }
   };
 
   return (
-    <>
-      <div className="bg-cover bg-center bg-no-repeat h-96 min-h-screen flex items-center justify-center bg-gray-100" style={{ backgroundImage: `url('./bunnies.png')` }}>
-        <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-          <div className="text-center mb-6">
-            <img
-              src="./logo.png"
-              alt="Logo"
-              className="w-28 mx-auto mb-3"
-            />
-            <h3 className="text-2xl font-semibold text-gray-800">Inicio de Sesión</h3>
-          </div>
-
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="flex items-center mb-4 border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-green-500">
-              <span className="px-3 py-3 bg-green-600 text-white">
-                <i className="bi bi-person-fill text-xl"></i>
-              </span>
-              <input
-                type="text"
-                className="w-full px-4 py-3 outline-none disabled:bg-gray-100"
-                placeholder="Usuario"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <div className="flex items-center mb-6 border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-green-500">
-              <span className="px-3 py-3 bg-green-600 text-white">
-                <i className="bi bi-lock-fill text-xl"></i>
-              </span>
-              <input
-                type="password"
-                className="w-full px-4 py-3 outline-none disabled:bg-gray-100"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            {errorMsg && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                {errorMsg}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full bg-green-600 text-white font-semibold py-3 rounded-md hover:bg-green-700 transition flex items-center justify-center disabled:opacity-70"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Cargando…
-                </>
-              ) : (
-                "Ingresar"
-              )}
-            </button>
-          </form>
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-100 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('./bunnies.png')" }}
+    >
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        {/* Logo y título */}
+        <div className="text-center mb-8">
+          <img src="./logo.png" alt="Logo" className="w-28 mx-auto mb-4" />
+          <h3 className="text-2xl font-semibold text-gray-800">Inicio de Sesión</h3>
         </div>
+
+        <form onSubmit={handle_submit} noValidate>
+          <InputField
+            icon="user"
+            type="text"
+            placeholder="Usuario"
+            value={username}
+            on_change={(e) => set_username(e.target.value)}
+            disabled={loading}
+          />
+
+          <InputField
+            icon="lock"
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            on_change={(e) => set_password(e.target.value)}
+            disabled={loading}
+            auto_complete="current-password"
+          />
+
+          {/* Mensaje de error */}
+          {error_msg && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 text-sm">
+              {error_msg}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-600 text-white font-semibold py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Cargando...
+              </>
+            ) : (
+              "Ingresar"
+            )}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
