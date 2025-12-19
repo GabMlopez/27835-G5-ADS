@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/auth_context";
 import { useNavigate } from "react-router-dom";
-
+import { login_consulta  }  from "../../servicios/login_servicios";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -19,16 +19,7 @@ export default function Login() {
     setErrorMsg("");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/usuario/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        setErrorMsg(err.message || "Error en el login");
-        return;
-      }
+      const res = await login_consulta(username, password);
       const data = await res.json();
       login(data.token, data.user);
       navigate('/');

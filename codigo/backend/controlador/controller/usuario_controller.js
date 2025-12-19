@@ -1,43 +1,54 @@
 const { usuario_servicio } = require('../servicios/usuario_servicio');
 const { generar_token } = require('../middleware/auth');
 const bcrypt = require('bcrypt');
-const pool = require('../../modelos/base_de_datos/db_pool');
 
-exports.loginUser = async (req, res) => {
+
+exports.login_user = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const query = `
-      SELECT * FROM usuario WHERE usuario_usuario = $1
-    `;
+    //Buscar usuario 
+    const user = await usuario_servicio.obtener_usuario_por_username(username);
 
-    const { rows } = await pool.query(query, [username]);
-
-    if (rows.length === 0) {
+    if (!user) {
+      await usuario_servicio.registrar_log(null, 'LOGIN_FALLIDO', `Usuario no encontrado: ${username}`);
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
 
-    const user = rows[0];
+    //Verificar si está bloqueado
+    const now = new Date();
+    if (user.is_blocked || (user.blocked_until && new Date(user.blocked_until) > now)) {
+      await usuario_servicio.registrar_log(user.usuario_id, 'INTENTO_BLOQUEADO', `Bloqueado hasta ${user.blocked_until}`);
+      return res.status(403).json({ 
+        message: 'Cuenta bloqueada temporalmente. Intenta de nuevo en 30 minutos.' 
+      });
+    }
 
+    // Validar contraseña
     const isValidPassword = await bcrypt.compare(password, user.usuario_contrasenia);
     if (!isValidPassword) {
+      await usuario_servicio.incrementar_intentos_fallidos(user.usuario_id, user.failed_attempts || 0);
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
+    // Resetear contadores en exito
+    await usuario_servicio.resetear_intentos_fallidos(user.usuario_id);
+
+    // Generar token
     const payload = {
       id: user.usuario_id,
-      usuario: user.usuario_usuario,
-      contrasenia: user.usuario_contrasenia
+      usuario: user.usuario_usuario
     };
     const token = generar_token(payload);
-    
+
     res.json({ token, user: payload });
 
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    await usuario_servicio.registrar_log(null, 'ERROR_SERVIDOR', `Login error: ${error.message}`);
+    res.status(500).json({ message: 'Error del servidor' });
   }
-  };
+};
 
 exports.update_user = async (req,res) => {
   const {id} = req.params;
