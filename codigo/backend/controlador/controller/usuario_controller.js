@@ -41,7 +41,7 @@ exports.login_user = async (req, res) => {
     };
     const token = generar_token(payload);
 
-    res.json({ token, user: payload });
+    res.status(200).json({ token, user: payload });
 
   } catch (error) {
     console.error('Login error:', error);

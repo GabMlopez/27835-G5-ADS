@@ -18,7 +18,7 @@ async function obtener_usuario_por_username(username) {
   const query = `
     SELECT * FROM usuario WHERE usuario_usuario = $1
   `;
-  const result = await pool.query(query, [username]);
+  const result = await pool.query(query, [sanitize(username)]);
   return result.rows[0] || null;
 }
 
@@ -28,7 +28,7 @@ async function registrar_log(usuarioId, accion, detalles = null) {
       INSERT INTO log_acciones (usuario_id, accion, detalles, fecha_hora)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
     `;
-    await pool.query(query, [usuarioId || null, accion, detalles]);
+    await pool.query(query, [sanitize(usuarioId) || null, sanitize(accion), sanitize(detalles)]);
   } catch (error) {
     console.error('Error al registrar log:', error);
   }
@@ -48,19 +48,19 @@ async function incrementar_intentos_fallidos(usuarioId, intentosActuales) {
           blocked_until = $2
       WHERE usuario_id = $3
     `;
-    values = [nuevosIntentos, blockedUntil, usuarioId];
-    await registrarLog(usuarioId, 'BLOQUEO_ACTIVADO', `Bloqueado por >5 intentos hasta ${blockedUntil}`);
+    values = [nuevosIntentos, blockedUntil, sanitize(usuarioId)];
+    await registrar_log(usuarioId, 'BLOQUEO_ACTIVADO', `Bloqueado por >5 intentos hasta ${blockedUntil}`);
   } else {
     query = `
       UPDATE usuario
       SET failed_attempts = $1,
           last_failed_attempt = CURRENT_TIMESTAMP
-      WHERE usuario_id = $3
+      WHERE usuario_id = $2
     `;
-    values = [nuevosIntentos, usuarioId];
+    values = [nuevosIntentos, sanitize(usuarioId)];
   }
   await pool.query(query, values);
-  await registrarLog(usuarioId, 'LOGIN_FALLIDO', `Intento fallido #${nuevosIntentos}`);
+  await registrar_log(usuarioId, 'LOGIN_FALLIDO', `Intento fallido #${nuevosIntentos}`);
 }
 
 async function resetear_intentos_fallidos(usuarioId) {
@@ -72,7 +72,7 @@ async function resetear_intentos_fallidos(usuarioId) {
         blocked_until = NULL
     WHERE usuario_id = $1
   `;
-  await pool.query(query, [usuarioId]);
+  await pool.query(query, [sanitize(usuarioId)]);
   await registrar_log(usuarioId, 'LOGIN_EXITOSO');
 }
 const usuario_servicio = {
