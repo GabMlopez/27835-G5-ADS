@@ -1,17 +1,16 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../base_de_datos');
-const bcrypt = require('bcrypt');
 
 const reproduccion = sequelize.define('reproduccion',{
   reproduccion_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
+    unique: true,
     allowNull: false,
   },
   reproduccion_fecha: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
     field: 'reproduccion_fecha' 
   },
   conejo_id: {
@@ -23,15 +22,36 @@ const reproduccion = sequelize.define('reproduccion',{
   tableName: 'reproduccion',     
   timestamps: false,       
   hooks: {
-    beforeCreate: async (reproduccion) => {
-        //Servicio de conejos para comprobar sexo del conejo y proposito
+    before_create: async (reproduccion) => {
+        await validar_entrada();
         
-    }
+    },
+    before_update: async (reproduccion) => {
+        await validar_entrada();
+        if (reproduccion.changed('reproduccion_id')) {
+          throw new Error('No se puede modificar el ID de la reproducción');
+        }
+      }  
     }
 });
 
-Usuario.prototype.validarContrasenia = async function(contrasenia) {
-  return await bcrypt.compare(contrasenia, this.usuario_contrasenia);
-};
+reproduccion.prototype.validar_entrada = async function(entrada) {
+    if(reproduccion.reproduccion_id == ''){ 
+           throw new Error('El ID de la reproducción no puede estar vacío');
+    }
+    if(reproduccion.reproduccion_fecha == ''){
+           throw new Error('La fecha de la reproducción no puede estar vacía');
+    }
 
-module.exports = Usuario;
+    if(reproduccion.conejo_id == ''){
+           throw new Error('El ID del conejo no puede estar vacío');
+    
+    }
+    
+    if (reproduccion.reproduccion_fecha <= Date.now()) {
+        throw new Error('La fecha de la reproducción debe ser una fecha futura');
+    }
+
+    return true;
+    }
+module.exports = reproduccion;

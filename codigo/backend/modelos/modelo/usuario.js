@@ -6,6 +6,7 @@ const usuario = sequelize.define('ususario',{
   usuario_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
+    unique: true,
     allowNull: false,
   },
   usuario_usuario: {
@@ -24,6 +25,17 @@ const usuario = sequelize.define('ususario',{
   timestamps: false,       
   hooks: {
     beforeCreate: async (usuario) => {
+      if(usuario.usuario_id == ''){
+        throw new Error('El ID del usuario no puede estar vacío');
+      }
+
+      if(usuario.usuario_usuario == ''){
+        throw new Error('El nombre de usuario no puede estar vacío');
+      }
+
+      if(usuario.usuario_contrasenia == ''){
+        throw new Error('La contraseña no puede estar vacía');
+      }
       if (usuario.usuario_contrasenia) {
         const saltRounds = 10;
         usuario.usuario_contrasenia = await bcrypt.hash(usuario.usuario_contrasenia, saltRounds);
@@ -38,8 +50,8 @@ const usuario = sequelize.define('ususario',{
   }
 });
 
-Usuario.prototype.validarContrasenia = async function(contrasenia) {
+usuario.prototype.validarContrasenia = async function(contrasenia) {
   return await bcrypt.compare(contrasenia, this.usuario_contrasenia);
 };
 
-module.exports = Usuario;
+module.exports = usuario;

@@ -11,7 +11,7 @@ exports.login_user = async (req, res) => {
     const user = await usuario_servicio.obtener_usuario_por_username(username);
 
     if (!user) {
-      await usuario_servicio.registrar_log(null, 'LOGIN_FALLIDO', `Usuario no encontrado: ${username}`);
+      await usuario_servicio.registrar_log("SiD0110110", 'LOGIN_FALLIDO', `Usuario no encontrado: ${username}`);
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
 
