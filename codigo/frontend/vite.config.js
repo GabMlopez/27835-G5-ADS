@@ -8,9 +8,8 @@ export default defineConfig({
     tailwindcss(),
   ],
   preview: {
-    host: '0.0.0.0',  // ya lo tienes probablemente vía CLI
+    host: '0.0.0.0',  
     port: Number(process.env.PORT) || 4173, 
     allowedHosts: ['.onrender.com']  
-    // O más específico: allowedHosts: ['two7835-g5-ads-1-front.onrender.com', '.onrender.com']
   }
 })

@@ -7,7 +7,6 @@ exports.login_user = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    //Buscar usuario 
     const user = await usuario_servicio.obtener_usuario_por_username(username);
 
     if (!user) {
@@ -15,7 +14,6 @@ exports.login_user = async (req, res) => {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
 
-    //Verificar si está bloqueado
     const now = new Date();
     if (user.is_blocked || (user.blocked_until && new Date(user.blocked_until) > now)) {
       await usuario_servicio.registrar_log(user.usuario_id, 'INTENTO_BLOQUEADO', `Bloqueado hasta ${user.blocked_until}`);
@@ -24,17 +22,14 @@ exports.login_user = async (req, res) => {
       });
     }
 
-    // Validar contraseña
     const isValidPassword = await bcrypt.compare(password, user.usuario_contrasenia);
     if (!isValidPassword) {
       await usuario_servicio.incrementar_intentos_fallidos(user.usuario_id, user.failed_attempts || 0);
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    // Resetear contadores en exito
     await usuario_servicio.resetear_intentos_fallidos(user.usuario_id);
 
-    // Generar token
     const payload = {
       id: user.usuario_id,
       usuario: user.usuario_usuario
@@ -45,7 +40,7 @@ exports.login_user = async (req, res) => {
 
   } catch (error) {
     console.error('Login error:', error);
-    await usuario_servicio.registrar_log(null, 'ERROR_SERVIDOR', `Login error: ${error.message}`);
+    await usuario_servicio.registrar_log('SiD0110110', 'ERROR_SERVIDOR', `Login error: ${error.message}`);
     res.status(500).json({ message: 'Error del servidor' });
   }
 };

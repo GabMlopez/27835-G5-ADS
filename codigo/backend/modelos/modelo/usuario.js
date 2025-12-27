@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../base_de_datos');
+const sequelize = require('../base_de_datos/sequelize');
 const bcrypt = require('bcrypt');
 
-const usuario = sequelize.define('ususario',{
+const usuario = sequelize.define('usuario', { 
   usuario_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
@@ -13,7 +13,7 @@ const usuario = sequelize.define('ususario',{
     type: DataTypes.STRING(32),
     allowNull: false,
     unique: true,
-    field: 'usuario_usuario' 
+    field: 'usuario_usuario'
   },
   usuario_contrasenia: {
     type: DataTypes.STRING(64),
@@ -21,30 +21,27 @@ const usuario = sequelize.define('ususario',{
     field: 'usuario_contrasenia'
   }
 }, {
-  tableName: 'usuario',     
-  timestamps: false,       
+  tableName: 'usuario',
+  timestamps: false,
   hooks: {
-    beforeCreate: async (usuario) => {
-      if(usuario.usuario_id == ''){
+    beforeCreate: async (instance) => {
+      if (!instance.usuario_id) {
         throw new Error('El ID del usuario no puede estar vacío');
       }
-
-      if(usuario.usuario_usuario == ''){
+      if (!instance.usuario_usuario) {
         throw new Error('El nombre de usuario no puede estar vacío');
       }
-
-      if(usuario.usuario_contrasenia == ''){
+      if (!instance.usuario_contrasenia) {
         throw new Error('La contraseña no puede estar vacía');
       }
-      if (usuario.usuario_contrasenia) {
-        const saltRounds = 10;
-        usuario.usuario_contrasenia = await bcrypt.hash(usuario.usuario_contrasenia, saltRounds);
-      }
+
+      const saltRounds = 10;
+      instance.usuario_contrasenia = await bcrypt.hash(instance.usuario_contrasenia, saltRounds);
     },
-    beforeUpdate: async (usuario) => {
-      if (usuario.changed('usuario_contrasenia')) {
+    beforeUpdate: async (instance) => {
+      if (instance.changed('usuario_contrasenia')) {
         const saltRounds = 10;
-        usuario.usuario_contrasenia= await bcrypt.hash(usuario.usuario_contrasenia, saltRounds);
+        instance.usuario_contrasenia = await bcrypt.hash(instance.usuario_contrasenia, saltRounds);
       }
     }
   }

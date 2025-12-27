@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../base_de_datos');
+const { DataTypes, Op } = require('sequelize');
+const sequelize = require('../base_de_datos/sequelize');
 
-const reproduccion = sequelize.define('reproduccion',{
+const reproduccion = sequelize.define('reproduccion', {
   reproduccion_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
@@ -9,9 +9,9 @@ const reproduccion = sequelize.define('reproduccion',{
     allowNull: false,
   },
   reproduccion_fecha: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DATE,  
     allowNull: false,
-    field: 'reproduccion_fecha' 
+    field: 'reproduccion_fecha'
   },
   conejo_id: {
     type: DataTypes.STRING(64),
@@ -19,39 +19,37 @@ const reproduccion = sequelize.define('reproduccion',{
     field: 'conejo_id'
   }
 }, {
-  tableName: 'reproduccion',     
-  timestamps: false,       
+  tableName: 'reproduccion',
+  timestamps: false,
   hooks: {
-    before_create: async (reproduccion) => {
-        await validar_entrada();
-        
+    beforeCreate: async (instance) => {
+      await instance.validar_entrada();
     },
-    before_update: async (reproduccion) => {
-        await validar_entrada();
-        if (reproduccion.changed('reproduccion_id')) {
-          throw new Error('No se puede modificar el ID de la reproducción');
-        }
-      }  
+    beforeUpdate: async (instance) => {
+      await instance.validar_entrada();
+      if (instance.changed('reproduccion_id')) {
+        throw new Error('No se puede modificar el ID de la reproducción');
+      }
     }
+  }
 });
 
-reproduccion.prototype.validar_entrada = async function(entrada) {
-    if(reproduccion.reproduccion_id == ''){ 
-           throw new Error('El ID de la reproducción no puede estar vacío');
-    }
-    if(reproduccion.reproduccion_fecha == ''){
-           throw new Error('La fecha de la reproducción no puede estar vacía');
-    }
+reproduccion.prototype.validar_entrada = async function() {
+  if (!this.reproduccion_id) {
+    throw new Error('El ID de la reproducción no puede estar vacío');
+  }
+  if (!this.reproduccion_fecha) {
+    throw new Error('La fecha de la reproducción no puede estar vacía');
+  }
+  if (!this.conejo_id) {
+    throw new Error('El ID del conejo no puede estar vacío');
+  }
 
-    if(reproduccion.conejo_id == ''){
-           throw new Error('El ID del conejo no puede estar vacío');
-    
-    }
-    
-    if (reproduccion.reproduccion_fecha <= Date.now()) {
-        throw new Error('La fecha de la reproducción debe ser una fecha futura');
-    }
+  if (new Date(this.reproduccion_fecha) <= new Date()) {
+    throw new Error('La fecha de la reproducción debe ser una fecha futura');
+  }
 
-    return true;
-    }
+  return true;
+};
+
 module.exports = reproduccion;
