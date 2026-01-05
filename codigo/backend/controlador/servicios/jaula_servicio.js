@@ -1,4 +1,5 @@
 const Jaula = require('../../modelos/modelo/jaula');
+const Conejo = require('../../modelos/modelo/conejo');
 const { Op } = require('sequelize');
 
 function validar_tipo_jaula(tipo) {
@@ -10,14 +11,25 @@ function validar_capacidad_jaula(capacidad, tipo) {
     return capacidad === 1;
   }
   if (tipo === 'Engorde') {
-    return capacidad >= 6 && capacidad <= 20; 
+    return capacidad >= 1 && capacidad <= 6; 
   }
   return false;
 }
 
+async function obtener_conejos_en_jaula(jaula_id) {
+  return await Conejo.count({
+    where: { jaula_id: jaula_id }
+  });
+}
+
+async function validar_eliminacion_jaula(jaula_id){
+  const conejos_en_jaula = await obtener_conejos_en_jaula(jaula_id);
+  return (conejos_en_jaula === 0);
+}
+
 async function crear_jaula(datos) {
   if (!datos.jaula_tipo || !validar_tipo_jaula(datos.jaula_tipo)) {
-    throw new Error('Tipo de jaula inválido. Debe ser "Reproduccion" o "Engorde"');
+    throw new Error('Tipo de jaula inválido. Debe ser Reproduccion o Engorde');
   }
 
   if (!datos.jaula_capacidad || !validar_capacidad_jaula(datos.jaula_capacidad, datos.jaula_tipo)) {
@@ -73,13 +85,23 @@ async function actualizar_jaula(jaula_id, datos_actualizacion) {
   return await jaula.update(datos_actualizacion);
 }
 
+async function eliminar_jaula(jaula_id) {
+  const jaula = await obtener_jaula_por_id(jaula_id);
+  if (!validar_eliminacion_jaula(jaula_id)) {
+    throw new Error('Esta jaula tiene conejos asignados. Por favor, reasigne o elimine los conejos antes de eliminar la jaula.');
+  }
+
+  return await jaula.destroy();
+}
+
 const jaula_servicio = {
   crear_jaula,
   obtener_jaulas,
   obtener_jaula_por_id,
   actualizar_jaula,
   validar_tipo_jaula,
-  validar_capacidad_jaula
+  validar_capacidad_jaula,
+  eliminar_jaula
 };
 
 module.exports = jaula_servicio;

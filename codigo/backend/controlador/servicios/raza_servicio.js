@@ -1,6 +1,7 @@
 
 const Raza = require('../../modelos/modelo/raza'); 
 const { Op } = require('sequelize');
+const sequelize = require('../../modelos/base_de_datos/sequelize');
 function validar_nombre_raza(nombre) {
   if (!nombre || nombre.trim() === '') {
     throw new Error('El nombre de la raza es requerido');
@@ -12,6 +13,27 @@ function validar_nombre_raza(nombre) {
   }
 
   return nombre.trim();
+}
+
+async function generar_siguiente_id() {
+  const ultima_raza = await Raza.findOne({
+    order: [['conejo_raza_id', 'DESC']],
+    where: { conejo_raza_id: { [Op.like]: 'CRZ%' } }
+  });
+  let nuevo_id_num = 1;
+  if (ultima_raza) {
+    const ultima_id_num = parseInt(ultima_raza.conejo_raza_id.slice(3));
+    nuevo_id_num = ultima_id_num + 1;
+  }
+
+  return 'CRZ' + String(nuevo_id_num).padStart(4, '0');
+}
+
+function validar_descripcion_raza(descripcion) {
+  if (descripcion && descripcion.length > 512) {
+    throw new Error('La descripción de la raza es demasiado larga. No puede exceder los 512 caracteres');
+  }
+  return descripcion ? descripcion.trim() : null;
 }
 
 async function crear_raza(datos) {
