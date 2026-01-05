@@ -70,6 +70,10 @@ async function crear_usuario(datos) {
   return await Usuario.create(datos);
 }
 
+async function registrar_log(usuario_id, accion, descripcion) {
+  
+}
+
 const usuario_servicio = {
   obtener_usuario_por_username,
   esta_bloqueado,
