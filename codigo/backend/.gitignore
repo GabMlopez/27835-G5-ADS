@@ -24,3 +24,5 @@ pruebas
 *.sln
 *.sw?
 *.env
+
+/tests

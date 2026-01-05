@@ -23,7 +23,6 @@ const Jaula = sequelize.define('jaula', {
   timestamps: false,
   hooks: {
     beforeCreate: async (instance) => {
-      await instance.validar_entrada();
 
       const ultima_jaula = await Jaula.findOne({
         order: [['jaula_id', 'DESC']],
@@ -40,6 +39,8 @@ const Jaula = sequelize.define('jaula', {
       }
 
       instance.jaula_id = 'J' + nuevo_id_num.toString().padStart(4, '0');
+
+      await instance.validar_entrada();
     },
     beforeUpdate: async (instance) => {
       await instance.validar_entrada();
@@ -77,8 +78,8 @@ Jaula.prototype.validar_entrada = async function() {
     throw new Error('La capacidad mínima para una jaula de reproducción es 1');
   }
 
-  if (this.jaula_tipo === 'Engorde' && this.jaula_capacidad < 6) {
-    throw new Error('La capacidad mínima para una jaula de engorde es 6');
+  if (this.jaula_tipo === 'Engorde' && this.jaula_capacidad > 6) {
+    throw new Error('La capacidad máxima para una jaula de engorde es 6');
   }
 };
 
