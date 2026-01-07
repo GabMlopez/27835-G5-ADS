@@ -5,7 +5,7 @@ const conejo_raza = sequelize.define('conejo_raza', {
   conejo_raza_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
-    allowNull: false,
+    allowNull: true,
     unique: true,
   },
   conejo_raza_nombre: {
@@ -23,23 +23,8 @@ const conejo_raza = sequelize.define('conejo_raza', {
   timestamps: false,
   hooks: {
     beforeCreate: async (instance) => {
+      await instance.generarId();
       await instance.validar_entrada();
-
-      const ultima_raza = await conejo_raza.findOne({
-        order: [['conejo_raza_id', 'DESC']],
-        where: { conejo_raza_id: { [Op.like]: 'CRZ%' } }
-      });
-
-      let nuevo_id_num = 1;
-      if (ultima_raza) {
-        const ultima_id_num = parseInt(ultima_raza.conejo_raza_id.slice(3));
-        nuevo_id_num = ultima_id_num + 1;
-      }
-      if (nuevo_id_num > 99999) {
-        throw new Error('Se ha alcanzado el número máximo de razas permitidas.');
-      }
-
-      instance.conejo_raza_id = 'CRZ' + nuevo_id_num.toString().padStart(5, '0');
     },
     beforeUpdate: async (instance) => {
       await instance.validar_entrada();
@@ -49,6 +34,24 @@ const conejo_raza = sequelize.define('conejo_raza', {
     }
   }
 });
+
+conejo_raza.prototype.generarId = async function() {
+  const ultima_raza = await conejo_raza.findOne({
+    order: [['conejo_raza_id', 'DESC']],
+    where: { conejo_raza_id: { [Op.like]: 'CRZ%' } }
+  });
+
+  let nuevo_id_num = 1;
+  if (ultima_raza) {
+    const ultima_id_num = parseInt(ultima_raza.conejo_raza_id.slice(3));
+    nuevo_id_num = ultima_id_num + 1;
+  }
+  if (nuevo_id_num > 99999) {
+    throw new Error('Se ha alcanzado el número máximo de razas permitidas.');
+  }
+
+  this.conejo_raza_id = 'CRZ' + nuevo_id_num.toString().padStart(5, '0');
+};
 
 conejo_raza.prototype.validar_entrada = async function() {
   if (!this.conejo_raza_id) {

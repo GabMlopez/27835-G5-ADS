@@ -59,7 +59,7 @@ async function crear_raza(datos) {
   return await Raza.create({
     conejo_raza_id,
     conejo_raza_nombre: nombre_normalizado,
-    conejo_raza_descripcion: descripcion_validada
+    conejo_raza_descripcion: descripcion_validadagit
   });
 }
 

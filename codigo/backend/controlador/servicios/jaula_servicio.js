@@ -1,6 +1,7 @@
 const Jaula = require('../../modelos/modelo/jaula');
 const Conejo = require('../../modelos/modelo/conejo');
 const { Op } = require('sequelize');
+const { options } = require('../../main');
 
 function validar_tipo_jaula(tipo) {
   return ['Reproduccion', 'Engorde'].includes(tipo);
@@ -22,35 +23,20 @@ async function obtener_conejos_en_jaula(jaula_id) {
   });
 }
 
+
 async function validar_eliminacion_jaula(jaula_id){
   const conejos_en_jaula = await obtener_conejos_en_jaula(jaula_id);
   return (conejos_en_jaula === 0);
 }
 
 async function crear_jaula(datos) {
-  if (!datos.jaula_tipo || !validar_tipo_jaula(datos.jaula_tipo)) {
+  if (!validar_tipo_jaula(datos.jaula_tipo)) {
     throw new Error('Tipo de jaula inválido. Debe ser Reproduccion o Engorde');
   }
 
-  if (!datos.jaula_capacidad || !validar_capacidad_jaula(datos.jaula_capacidad, datos.jaula_tipo)) {
-    throw new Error(`Capacidad inválida para jaula de tipo "${datos.jaula_tipo}"`);
+  if (!validar_capacidad_jaula(datos.jaula_capacidad, datos.jaula_tipo)) {
+    throw new Error(`Capacidad inválida para jaula de tipo ${datos.jaula_tipo}`);
   }
-
-  const ultima_jaula = await Jaula.findOne({
-    order: [['jaula_id', 'DESC']],
-    where: { jaula_id: { [Op.like]: 'J%' } }
-  });
-
-  let numero_secuencial = 1;
-  if (ultima_jaula) {
-    numero_secuencial = parseInt(ultima_jaula.jaula_id.slice(1)) + 1;
-  }
-
-  if (numero_secuencial > 9999) {
-    throw new Error('Se ha alcanzado el límite máximo de jaulas.');
-  }
-
-  datos.jaula_id = 'J' + String(numero_secuencial).padStart(4, '0');
 
   return await Jaula.create(datos);
 }
@@ -75,7 +61,7 @@ async function actualizar_jaula(jaula_id, datos_actualizacion) {
     throw new Error('Tipo de jaula inválido');
   }
 
-  if (datos_actualizacion.jaula_capacidad) {
+  if (datos_actualizacion.jaula_capacidad !== undefined) {
     const tipo = datos_actualizacion.jaula_tipo || jaula.jaula_tipo;
     if (!validar_capacidad_jaula(datos_actualizacion.jaula_capacidad, tipo)) {
       throw new Error(`Capacidad no permitida para jaula de ${tipo}`);

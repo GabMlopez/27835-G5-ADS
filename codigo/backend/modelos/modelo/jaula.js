@@ -5,7 +5,7 @@ const Jaula = sequelize.define('jaula', {
   jaula_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
-    allowNull: false,
+    allowNull: true,
     unique: true,
   },
   jaula_tipo: {
@@ -24,7 +24,21 @@ const Jaula = sequelize.define('jaula', {
   hooks: {
     beforeCreate: async (instance) => {
 
-      const ultima_jaula = await Jaula.findOne({
+      await instance.generarId();
+
+      await instance.validar_entrada();
+    },
+    beforeUpdate: async (instance) => {
+      await instance.validar_entrada();
+      if (instance.changed('jaula_id')) {
+        throw new Error('No se puede modificar el ID de la jaula');
+      }
+    }
+  }
+});
+
+Jaula.prototype.generarId = async function() {
+    const ultima_jaula = await Jaula.findOne({
         order: [['jaula_id', 'DESC']],
         where: { jaula_id: { [Op.like]: 'J%' } }
       });
@@ -38,48 +52,26 @@ const Jaula = sequelize.define('jaula', {
         throw new Error('Se ha alcanzado el número máximo de jaulas permitidas.');
       }
 
-      instance.jaula_id = 'J' + nuevo_id_num.toString().padStart(4, '0');
-
-      await instance.validar_entrada();
-    },
-    beforeUpdate: async (instance) => {
-      await instance.validar_entrada();
-      if (instance.changed('jaula_id')) {
-        throw new Error('No se puede modificar el ID de la jaula');
-      }
-    }
-  }
-});
+      this.jaula_id = 'J' + nuevo_id_num.toString().padStart(4, '0');
+}
 
 Jaula.prototype.validar_entrada = async function() {
   if (!this.jaula_id) {
     throw new Error('El ID de la jaula no puede estar vacío');
   }
-  if (!this.jaula_capacidad && this.jaula_capacidad !== 0) {
+  if (!this.jaula_capacidad || this.jaula_capacidad === 0) {
     throw new Error('La capacidad de la jaula no puede estar vacía');
   }
   if (!this.jaula_tipo) {
     throw new Error('El tipo de jaula no puede estar vacío');
   }
 
-  if (this.jaula_capacidad <= 0) {
-    throw new Error('La capacidad de la jaula debe ser un número positivo');
-  }
-
   if (!isNaN(this.jaula_tipo)) {
     throw new Error('El tipo de jaula no puede ser un número');
   }
 
-  if (!['Reproduccion', 'Engorde'].includes(this.jaula_tipo)) {
-    throw new Error('El tipo de jaula debe ser "Reproduccion" o "Engorde"');
-  }
-
-  if (this.jaula_tipo === 'Reproduccion' && this.jaula_capacidad < 1) {
-    throw new Error('La capacidad mínima para una jaula de reproducción es 1');
-  }
-
-  if (this.jaula_tipo === 'Engorde' && this.jaula_capacidad > 6) {
-    throw new Error('La capacidad máxima para una jaula de engorde es 6');
+  if( isNaN(this.jaula_capacidad)){
+    throw new Error('La capacidad de la jaula debe ser un número');
   }
 };
 
