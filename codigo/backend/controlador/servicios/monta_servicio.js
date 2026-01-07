@@ -1,4 +1,4 @@
-const Reproduccion = require('../../modelos/modelo/reproduccion');
+const Reproduccion = require('../../modelos/modelo/montas');
 const Conejo = require('../../modelos/modelo/conejo');
 const { Op } = require('sequelize');
 
@@ -21,7 +21,7 @@ async function crear_reproduccion(datos) {
   }
 
   if (conejo.conejo_sexo !== 'Hembra') {
-    throw new Error('Solo conejos hembra pueden tener registros de reproducción');
+    throw new Error('Solo conejos hembra pueden tener registros en las montas');
   }
 
   if (conejo.conejo_estado !== 'Saludable' && conejo.conejo_estado !== 'Preñada') {
@@ -39,7 +39,7 @@ async function crear_reproduccion(datos) {
   }
 
   if (numero_secuencial > 9999) {
-    throw new Error('Se ha alcanzado el límite máximo de registros de reproducción');
+    throw new Error('Se ha alcanzado el límite máximo de registros de la monta');
   }
 
   datos.reproduccion_id = 'REP' + String(numero_secuencial).padStart(4, '0');
@@ -67,19 +67,11 @@ async function obtener_reproduccion_por_id(reproduccion_id) {
   });
 }
 
-async function listar_reproducciones() {
-  return await Reproduccion.findAll({
-    include: [{ model: Conejo, attributes: ['conejo_id', 'conejo_sexo'] }],
-    order: [['reproduccion_fecha', 'DESC']]
-  });
-}
-
-const reproduccion_servicio = {
+const monta_servicio = {
   crear_reproduccion,
   obtener_reproducciones,
   obtener_reproducciones_por_conejo,
-  obtener_reproduccion_por_id,
-  listar_reproducciones
+  obtener_reproduccion_por_id
 };
 
-module.exports = reproduccion_servicio;
+module.exports = monta_servicio;
