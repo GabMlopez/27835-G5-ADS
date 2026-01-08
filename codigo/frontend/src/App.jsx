@@ -6,12 +6,14 @@ import ManejoCuidados from './paginas/cuidados/ManejoCuidados'
 import GestionarMontas from './paginas/cuidados/GestionarMontas'
 import GestionarAlimentacion from './paginas/cuidados/GestionarAlimentacion'
 import GestionarVacunacion from './paginas/cuidados/GestionarVacunacion'
+import GestionarJaulas from './paginas/jaulas/GestionarJaulas'
 function App() {
 
   return (
     <>
       <Menu />
       <Routes>
+        <Route path="/jaulas" element={<GestionarJaulas />} />
         <Route path="/cuidados" element={<ManejoCuidados />} />
         <Route path="/cuidados/montas" element={<GestionarMontas />} />
         <Route path="/cuidados/alimentacion" element={<GestionarAlimentacion />} />
