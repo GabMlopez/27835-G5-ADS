@@ -34,22 +34,6 @@ async function crear_alimentacion(datos) {
     throw new Error('Este conejo ya tiene 2 registros de alimentación hoy. No se pueden agregar más.');
   }
 
-  const ultima_alimentacion = await Alimentacion.findOne({
-    order: [['alimentacion_id', 'DESC']],
-    where: { alimentacion_id: { [Op.like]: 'ALM%' } }
-  });
-
-  let numero_secuencial = 1;
-  if (ultima_alimentacion) {
-    numero_secuencial = parseInt(ultima_alimentacion.alimentacion_id.slice(3)) + 1;
-  }
-
-  if (numero_secuencial > 9999) {
-    throw new Error('Se ha alcanzado el límite máximo de registros de alimentación (9999).');
-  }
-
-  datos.alimentacion_id = 'ALM' + String(numero_secuencial).padStart(4, '0');
-
   return await Alimentacion.create(datos);
 }
 

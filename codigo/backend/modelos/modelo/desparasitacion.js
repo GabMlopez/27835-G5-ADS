@@ -6,7 +6,8 @@ const desparasitacion = sequelize.define('desparasitacion', {
     desparasitacion_id: {
         type: DataTypes.STRING(32),
         primaryKey: true,
-        allowNull: false,
+        allowNull: true,
+        unique: true,
     },
     desparasitacion_fecha: {
         type: DataTypes.DATE,
@@ -28,7 +29,9 @@ const desparasitacion = sequelize.define('desparasitacion', {
     timestamps: false,
     hooks: {
         beforeCreate: async (instance) => {
+            await instance.generarId();
             await instance.validar_entrada();
+
         },
         beforeUpdate: async (instance) => {
             await instance.validar_entrada();
@@ -38,6 +41,24 @@ const desparasitacion = sequelize.define('desparasitacion', {
         }
     }
 });
+
+desparasitacion.prototype.generarId = async function() {
+  const ultima_desparasitacion = await Desparasitacion.findOne({
+    order: [['desparasitacion_id', 'DESC']],
+    where: { desparasitacion_id: { [Op.like]: 'DES%' } }
+  });
+
+  let numero_secuencial = 1;
+  if (ultima_desparasitacion) {
+    numero_secuencial = parseInt(ultima_desparasitacion.desparasitacion_id.slice(3)) + 1;
+  }
+
+  if (numero_secuencial > 999999) {
+    throw new Error('Se ha alcanzado el límite máximo de registros de desparasitación');
+  }
+
+  this.desparasitacion_id = 'DES' + String(numero_secuencial).padStart(6, '0');
+}
 
 desparasitacion.prototype.validar_entrada = async function() {
     if (!this.desparasitacion_id) {

@@ -12,28 +12,6 @@ async function crear_conejo(datos) {
   if (!datos.conejo_raza_id) throw new Error('El ID de la raza es requerido');
   if (!datos.conejo_estado) throw new Error('El estado del conejo es requerido');
 
-  const raza = await Raza.findByPk(datos.conejo_raza_id);
-  if (!raza) {
-    throw new Error('Raza no encontrada');
-  }
-
-  const palabras = raza.conejo_raza_nombre.trim().split(/\s+/);
-  const iniciales = palabras.map(p => p.charAt(0).toUpperCase()).join('');
-
-  const count = await Conejo.count({
-    where: {
-      conejo_id: { [Op.like]: `${iniciales}%` }
-    }
-  });
-
-  const nuevo_numero = count + 1;
-  if (nuevo_numero > 9999) {
-    throw new Error(`Se ha alcanzado el límite máximo de conejos para la raza ${raza.conejo_raza_nombre}`);
-  }
-
-  const id_numerico = String(nuevo_numero).padStart(4, '0');
-  datos.conejo_id = iniciales + id_numerico;
-
   return await Conejo.create(datos);
 }
 

@@ -2,23 +2,6 @@ const Desparasitacion = require('../../modelos/modelo/desparasitacion');
 const Conejo = require('../models/conejo');
 const { Op } = require('sequelize');
 
-async function generar_siguiente_id() {
-  const ultima_desparasitacion = await Desparasitacion.findOne({
-    order: [['desparasitacion_id', 'DESC']],
-    where: { desparasitacion_id: { [Op.like]: 'DES%' } }
-  });
-
-  let numero_secuencial = 1;
-  if (ultima_desparasitacion) {
-    numero_secuencial = parseInt(ultima_desparasitacion.desparasitacion_id.slice(3)) + 1;
-  }
-
-  if (numero_secuencial > 999999) {
-    throw new Error('Se ha alcanzado el límite máximo de registros de desparasitación');
-  }
-
-  return 'DES' + String(numero_secuencial).padStart(6, '0');
-}
 
 async function validar_desparasitacion_mensual(conejo_id, desparasitacion_fecha) {
   const fecha = new Date(desparasitacion_fecha);
@@ -49,10 +32,7 @@ async function crear_desparasitacion(datos) {
 
   await validar_desparasitacion_mensual(conejo_id, desparasitacion_fecha);
 
-  const desparasitacion_id = await generar_siguiente_id();
-
   const nueva_desparasitacion = await Desparasitacion.create({
-    desparasitacion_id,
     conejo_id,
     desparasitacion_fecha,
     desparasitacion_realizada

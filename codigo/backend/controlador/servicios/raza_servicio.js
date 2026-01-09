@@ -15,19 +15,6 @@ function validar_nombre_raza(nombre) {
   return nombre.trim();
 }
 
-async function generar_siguiente_id() {
-  const ultima_raza = await Raza.findOne({
-    order: [['conejo_raza_id', 'DESC']],
-    where: { conejo_raza_id: { [Op.like]: 'CRZ%' } }
-  });
-  let nuevo_id_num = 1;
-  if (ultima_raza) {
-    const ultima_id_num = parseInt(ultima_raza.conejo_raza_id.slice(3));
-    nuevo_id_num = ultima_id_num + 1;
-  }
-
-  return 'CRZ' + String(nuevo_id_num).padStart(4, '0');
-}
 
 function validar_descripcion_raza(descripcion) {
   if (descripcion && descripcion.length > 512) {
@@ -54,12 +41,9 @@ async function crear_raza(datos) {
 
   const descripcion_validada = validar_descripcion_raza(conejo_raza_descripcion);
 
-  const conejo_raza_id = await generar_siguiente_id();
-
   return await Raza.create({
-    conejo_raza_id,
     conejo_raza_nombre: nombre_normalizado,
-    conejo_raza_descripcion: descripcion_validadagit
+    conejo_raza_descripcion: descripcion_validada
   });
 }
 

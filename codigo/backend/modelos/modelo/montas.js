@@ -6,7 +6,7 @@ const reproduccion = sequelize.define('reproduccion', {
     type: DataTypes.STRING(32),
     primaryKey: true,
     unique: true,
-    allowNull: false,
+    allowNull: true,
   },
   reproduccion_fecha: {
     type: DataTypes.DATE,  
@@ -23,6 +23,7 @@ const reproduccion = sequelize.define('reproduccion', {
   timestamps: false,
   hooks: {
     beforeCreate: async (instance) => {
+      await instance.generarId();
       await instance.validar_entrada();
     },
     beforeUpdate: async (instance) => {
@@ -34,6 +35,23 @@ const reproduccion = sequelize.define('reproduccion', {
   }
 });
 
+reproduccion.prototype.generarId = async function() {
+  const ultima_reproduccion = await Reproduccion.findOne({
+    order: [['reproduccion_id', 'DESC']],
+    where: { reproduccion_id: { [Op.like]: 'REP%' } }
+  });
+
+  let numero_secuencial = 1;
+  if (ultima_reproduccion) {
+    numero_secuencial = parseInt(ultima_reproduccion.reproduccion_id.slice(3)) + 1;
+  }
+
+  if (numero_secuencial > 9999) {
+    throw new Error('Se ha alcanzado el límite máximo de registros de la monta');
+  }
+
+  datos.reproduccion_id = 'REP' + String(numero_secuencial).padStart(4, '0');
+};
 reproduccion.prototype.validar_entrada = async function() {
   if (!this.reproduccion_id) {
     throw new Error('El ID de la reproducción no puede estar vacío');

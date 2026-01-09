@@ -6,7 +6,8 @@ const alimentacion = sequelize.define('alimentacion', {
   alimentacion_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
-    allowNull: false,
+    allowNull: true,
+    unique: true,
   },
   alimentacion_fecha: {
     type: DataTypes.DATE,
@@ -33,6 +34,7 @@ const alimentacion = sequelize.define('alimentacion', {
   timestamps: false,
   hooks: {
     beforeCreate: async (instance) => {
+      await instance.generarId(instance);
       await instance.validar_entrada();
     },
     beforeUpdate: async (instance) => {
@@ -44,6 +46,24 @@ const alimentacion = sequelize.define('alimentacion', {
   }
 });
 
+alimentacion.prototype.generarId = async function() {
+  const ultima_alimentacion = await Alimentacion.findOne({
+      order: [['alimentacion_id', 'DESC']],
+      where: { alimentacion_id: { [Op.like]: 'ALM%' } }
+    });
+  
+    let numero_secuencial = 1;
+    if (ultima_alimentacion) {
+      numero_secuencial = parseInt(ultima_alimentacion.alimentacion_id.slice(3)) + 1;
+    }
+  
+    if (numero_secuencial > 9999) {
+      throw new Error('Se ha alcanzado el límite máximo de registros de alimentación (9999).');
+    }
+  
+    this.alimentacion_id = 'ALM' + String(numero_secuencial).padStart(4, '0');
+  }
+  
 alimentacion.prototype.validar_entrada = async function() {
   if (!this.alimentacion_id || !this.alimentacion_id.startsWith('ALM')) {
     throw new Error('El ID debe comenzar con "ALM" y tener formato válido');

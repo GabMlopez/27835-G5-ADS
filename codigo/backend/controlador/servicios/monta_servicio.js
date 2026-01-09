@@ -28,22 +28,6 @@ async function crear_reproduccion(datos) {
     throw new Error('El conejo debe estar Saludable o Preñada para registrar una monta');
   }
 
-  const ultima_reproduccion = await Reproduccion.findOne({
-    order: [['reproduccion_id', 'DESC']],
-    where: { reproduccion_id: { [Op.like]: 'REP%' } }
-  });
-
-  let numero_secuencial = 1;
-  if (ultima_reproduccion) {
-    numero_secuencial = parseInt(ultima_reproduccion.reproduccion_id.slice(3)) + 1;
-  }
-
-  if (numero_secuencial > 9999) {
-    throw new Error('Se ha alcanzado el límite máximo de registros de la monta');
-  }
-
-  datos.reproduccion_id = 'REP' + String(numero_secuencial).padStart(4, '0');
-
   return await Reproduccion.create(datos);
 }
 

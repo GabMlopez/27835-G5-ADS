@@ -2,23 +2,6 @@ const Vacunacion = require('....//modelos/modelo/vacunacion');
 const Conejo = require('../modelos/modelo/conejo');
 const { Op } = require('sequelize');
 
-async function generar_siguiente_id() {
-  const ultima_vacunacion = await Vacunacion.findOne({
-    order: [['vacunacion_id', 'DESC']],
-    where: { vacunacion_id: { [Op.like]: 'V%' } }
-  });
-
-  let numero_secuencial = 1;
-  if (ultima_vacunacion) {
-    numero_secuencial = parseInt(ultima_vacunacion.vacunacion_id.slice(1)) + 1;
-  }
-
-  if (numero_secuencial > 999999) {
-    throw new Error('Se ha alcanzado el límite máximo de registros de vacunación');
-  }
-
-  return 'V' + String(numero_secuencial).padStart(6, '0');
-}
 
 async function validar_vacunacion_anual(conejo_id, vacunacion_fecha, vacunacion_tipo) {
   const fecha = new Date(vacunacion_fecha);
@@ -46,10 +29,7 @@ async function crear_vacunacion_para_conejo(datos) {
 
   await validar_vacunacion_anual(conejo_id, vacunacion_fecha, vacunacion_tipo);
 
-  const vacunacion_id = await generar_siguiente_id();
-
   const nueva_vacunacion = await Vacunacion.create({
-    vacunacion_id,
     conejo_id,
     vacunacion_fecha,
     vacunacion_tipo

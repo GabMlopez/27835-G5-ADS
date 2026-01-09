@@ -6,7 +6,8 @@ const conejo = sequelize.define('conejo',{
   conejo_id: {
     type: DataTypes.STRING(32),
     primaryKey: true,
-    allowNull: false,
+    allowNull: true,
+    unique: true,
   },
   conejo_sexo: {
     type: DataTypes.STRING(16),
@@ -53,9 +54,23 @@ const conejo = sequelize.define('conejo',{
   timestamps: false,       
   hooks: {
     beforeCreate: async (instance) => {  
+      
+      await instance.generarId();
       await instance.validar_entrada();  
+    },
 
-      const raza = await Raza.findByPk(instance.conejo_raza_id);
+    beforeUpdate: async (instance) => {
+      await instance.validar_entrada();
+
+      if (instance.changed('conejo_id')) {
+        throw new Error('No se puede modificar el ID del conejo');
+      }
+    }
+  }
+});
+
+conejo.prototype.generarId = async function() {
+  const raza = await Raza.findByPk(instance.conejo_raza_id);
       if (!raza) {
         throw new Error('Raza no encontrada');
       }
@@ -75,19 +90,9 @@ const conejo = sequelize.define('conejo',{
       }
 
       const idNumerico = String(nuevoNumero).padStart(4, '0');
-      instance.conejo_id = iniciales + idNumerico;
-    },
 
-    beforeUpdate: async (instance) => {
-      await instance.validar_entrada();
-
-      if (instance.changed('conejo_id')) {
-        throw new Error('No se puede modificar el ID del conejo');
-      }
-    }
-  }
-});
-
+      this.conejo_id = iniciales + idNumerico;
+};
 conejo.prototype.validar_entrada = async function() {
   if (!this.conejo_id || this.conejo_id === '') {
     throw new Error('El ID del conejo no puede estar vacío');

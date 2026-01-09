@@ -28,6 +28,7 @@ const vacunacion = sequelize.define('vacunacion', {
     timestamps: false,
     hooks: {
         beforeCreate: async (instance) => {
+            await instance.generar_siguiente_id();
             await instance.validar_entrada();
         },
         beforeUpdate: async (instance) => {
@@ -38,6 +39,25 @@ const vacunacion = sequelize.define('vacunacion', {
         }
     }
 });
+
+vacunacion.prototype.generar_siguiente_id = async function() {
+  const ultima_vacunacion = await Vacunacion.findOne({
+    order: [['vacunacion_id', 'DESC']],
+    where: { vacunacion_id: { [Op.like]: 'V%' } }
+  });
+
+  let numero_secuencial = 1;
+  if (ultima_vacunacion) {
+    numero_secuencial = parseInt(ultima_vacunacion.vacunacion_id.slice(1)) + 1;
+  }
+
+  if (numero_secuencial > 999999) {
+    throw new Error('Se ha alcanzado el límite máximo de registros de vacunación');
+  }
+
+  this.vacunacion_id = 'V' + String(numero_secuencial).padStart(6, '0');
+}
+
 vacunacion.prototype.validar_entrada = async function() {
     if (!this.conejo_id) {
         throw new Error('El ID del conejo es requerido');
