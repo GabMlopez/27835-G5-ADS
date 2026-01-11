@@ -49,12 +49,24 @@ async function eliminar_conejo(conejo_id) {
   return { message: 'Conejo eliminado correctamente' };
 }
 
+async function cambiar_estado_conejo(conejo, nuevo_estado, transaction) {
+  if (!conejo) {
+    throw new Error('Conejo inválido');
+  }
+
+  await conejo.update(
+    { conejo_estado: nuevo_estado },
+    { transaction }
+  );
+}
+
 const conejo_servicio= {
   crear_conejo,
   obtener_conejos,
   obtener_conejo_por_id,
   actualizar_conejo,
-  eliminar_conejo
+  eliminar_conejo,
+  cambiar_estado_conejo
 };
 
 module.exports = conejo_servicio;

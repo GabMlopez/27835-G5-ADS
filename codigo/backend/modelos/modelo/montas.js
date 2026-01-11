@@ -1,5 +1,6 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('../base_de_datos/sequelize');
+const conejo = require('./conejo');
 
 const reproduccion = sequelize.define('reproduccion', {
   reproduccion_id: {
@@ -17,6 +18,10 @@ const reproduccion = sequelize.define('reproduccion', {
     type: DataTypes.STRING(64),
     allowNull: false,
     field: 'conejo_id'
+  },reproduccion_estado: {
+    type: DataTypes.STRING(32),
+    allowNull: true,
+    field: 'reproduccion_estado'
   }
 }, {
   tableName: 'reproduccion',
@@ -36,7 +41,7 @@ const reproduccion = sequelize.define('reproduccion', {
 });
 
 reproduccion.prototype.generarId = async function() {
-  const ultima_reproduccion = await Reproduccion.findOne({
+  const ultima_reproduccion = await reproduccion.findOne({
     order: [['reproduccion_id', 'DESC']],
     where: { reproduccion_id: { [Op.like]: 'REP%' } }
   });
@@ -50,7 +55,7 @@ reproduccion.prototype.generarId = async function() {
     throw new Error('Se ha alcanzado el límite máximo de registros de la monta');
   }
 
-  datos.reproduccion_id = 'REP' + String(numero_secuencial).padStart(4, '0');
+  this.reproduccion_id = 'REP' + String(numero_secuencial).padStart(4, '0');
 };
 reproduccion.prototype.validar_entrada = async function() {
   if (!this.reproduccion_id) {
@@ -63,6 +68,9 @@ reproduccion.prototype.validar_entrada = async function() {
     throw new Error('El ID del conejo no puede estar vacío');
   }
 
+  if (!this.reproduccion_estado){
+    throw new Error('El estado de la reproducción no puede estar vacío');
+  }
   if (new Date(this.reproduccion_fecha) <= new Date()) {
     throw new Error('La fecha de la reproducción debe ser una fecha futura');
   }
@@ -70,4 +78,8 @@ reproduccion.prototype.validar_entrada = async function() {
   return true;
 };
 
+reproduccion.belongsTo(conejo, {
+  foreignKey: 'conejo_id',
+  as: 'conejo'
+});
 module.exports = reproduccion;

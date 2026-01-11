@@ -37,7 +37,7 @@ async function crear_alimentacion(datos) {
   return await Alimentacion.create(datos);
 }
 
-async function actualizar_alimentacion(datos) {
+async function actualizar_alimentacion(datos, alimentacion_id) {
   if (!datos.conejo_id) {
     throw new Error('El ID del conejo es requerido');
   }
@@ -51,7 +51,8 @@ async function actualizar_alimentacion(datos) {
     throw new Error('La dieta es requerida');
   }
   
-  return await Alimentacion.update(datos, {where: { id: datos.id }});
+  return await Alimentacion.update( datos, { where: { alimentacion_id } }
+);
 
 }
 
@@ -67,11 +68,16 @@ async function obtener_alimentacion_por_id(alimentacion_id) {
   return await Alimentacion.findByPk(alimentacion_id);
 }
 
+async function obtener_lista_alimentacion() {
+  return await Alimentacion.findAll();
+}
+
 const alimentacion_servicio = {
   crear_alimentacion,
   actualizar_alimentacion,
   obtener_alimentaciones_por_conejo,
-  obtener_alimentacion_por_id
+  obtener_alimentacion_por_id,
+  obtener_lista_alimentacion
 };
 
 module.exports = alimentacion_servicio;

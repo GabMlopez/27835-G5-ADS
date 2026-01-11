@@ -50,7 +50,7 @@ const alimentacion = sequelize.define('alimentacion', {
 });
 
 alimentacion.prototype.generarId = async function() {
-  const ultima_alimentacion = await Alimentacion.findOne({
+  const ultima_alimentacion = await alimentacion.findOne({
       order: [['alimentacion_id', 'DESC']],
       where: { alimentacion_id: { [Op.like]: 'ALM%' } }
     });
