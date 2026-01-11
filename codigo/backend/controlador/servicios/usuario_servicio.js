@@ -82,6 +82,7 @@ const usuario_servicio = {
   actualizar_contrasenia,
   validar_contrasenia,
   crear_usuario,
+  registrar_log
 };
 
 module.exports = { usuario_servicio };

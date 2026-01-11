@@ -37,6 +37,25 @@ async function crear_alimentacion(datos) {
   return await Alimentacion.create(datos);
 }
 
+async function actualizar_alimentacion(datos) {
+  if (!datos.conejo_id) {
+    throw new Error('El ID del conejo es requerido');
+  }
+  if (!datos.alimentacion_fecha) {
+    throw new Error('La fecha de alimentación es requerida');
+  }
+  if (!datos.alimentacion_justificacion) {
+    throw new Error('La justificación es requerida');
+  }
+  if (!datos.alimentacion_dieta) {
+    throw new Error('La dieta es requerida');
+  }
+  
+  return await Alimentacion.update(datos, {where: { id: datos.id }});
+
+}
+
+
 async function obtener_alimentaciones_por_conejo(conejo_id) {
   return await Alimentacion.findAll({
     where: { conejo_id },
@@ -50,6 +69,7 @@ async function obtener_alimentacion_por_id(alimentacion_id) {
 
 const alimentacion_servicio = {
   crear_alimentacion,
+  actualizar_alimentacion,
   obtener_alimentaciones_por_conejo,
   obtener_alimentacion_por_id
 };

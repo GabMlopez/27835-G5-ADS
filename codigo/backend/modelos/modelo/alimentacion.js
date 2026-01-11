@@ -42,6 +42,9 @@ const alimentacion = sequelize.define('alimentacion', {
       if (instance.changed('alimentacion_id')) {
         throw new Error('No se puede modificar el ID de la alimentación');
       }
+      if (instance.changed('fecha_creacion')) {
+        throw new Error('No se puede modificar la fecha de creación');
+      }
     }
   }
 });

@@ -70,12 +70,13 @@ const conejo = sequelize.define('conejo',{
 });
 
 conejo.prototype.generarId = async function() {
-  const raza = await Raza.findByPk(instance.conejo_raza_id);
+  const raza = await Raza.findByPk(this.conejo_raza_id);
+
       if (!raza) {
         throw new Error('Raza no encontrada');
       }
 
-      const palabras = raza.raza_nombre.trim().split(/\s+/);
+      const palabras = raza.conejo_raza_nombre.trim().split(/\s+/);
       const iniciales = palabras.map(p => p.charAt(0).toUpperCase()).join('');
 
       const count = await conejo.count({
@@ -93,10 +94,8 @@ conejo.prototype.generarId = async function() {
 
       this.conejo_id = iniciales + idNumerico;
 };
+
 conejo.prototype.validar_entrada = async function() {
-  if (!this.conejo_id || this.conejo_id === '') {
-    throw new Error('El ID del conejo no puede estar vacío');
-  }
   if (this.conejo_edad === null || this.conejo_edad === undefined || this.conejo_edad === '') {
     throw new Error('La edad del conejo no puede estar vacía');
   }
@@ -152,5 +151,10 @@ conejo.prototype.validar_entrada = async function() {
 
   return true;
 };
+
+conejo.belongsTo(Raza, {
+  foreignKey: 'conejo_raza_id',
+  as: 'raza'
+});
 
 module.exports = conejo;

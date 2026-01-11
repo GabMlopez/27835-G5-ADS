@@ -1,5 +1,5 @@
 const Conejo = require('../../modelos/modelo/conejo');
-const Raza = require('../models/raza'); 
+const Raza = require('../../modelos/modelo/raza'); 
 const { Op } = require('sequelize');
 
 async function crear_conejo(datos) {
@@ -17,14 +17,14 @@ async function crear_conejo(datos) {
 
 async function obtener_conejos() {
   return await Conejo.findAll({
-    include: [{ model: Raza, attributes: ['conejo_raza_nombre'] }],
+    include: [{ model: Raza, as : "raza", attributes: ['conejo_raza_nombre'] }],
     order: [['conejo_id', 'ASC']]
   });
 }
 
 async function obtener_conejo_por_id(conejo_id) {
   return await Conejo.findByPk(conejo_id, {
-    include: [{ model: Raza, attributes: ['conejo_raza_nombre'] }]
+    include: [{ model: Raza, as : "raza", attributes: ['conejo_raza_nombre'] }]
   });
 }
 

@@ -35,7 +35,7 @@ const getPenById = async (req, res) => {
     }
     res.status(200).json(jaula);
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       message: error.message || 'Error al obtener la jaula'
     });
   }
