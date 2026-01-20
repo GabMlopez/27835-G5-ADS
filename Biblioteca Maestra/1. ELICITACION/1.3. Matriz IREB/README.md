@@ -8,4 +8,4 @@ Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja
 ## Versionamiento
 |Código | Descripción | Versión | Fecha de Creación | Autores | Ubicación | Observaciones | Variante de Requisito | Variante de plataforma |
 |- | - | - | - | - | - | - | - | - |
-|IREB|Matriz IREB|1.0.0|13-02-2025|Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja|```/Biblioteca de Soporte/1.ELICITACION/Matriz IREB/```|Versión Inicial|Español|Windows 11|
+|IREB|Matriz IREB|1.0.0|29-10-2025|Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja|```/Biblioteca de Soporte/1.ELICITACION/Matriz IREB/```|Versión Inicial|Español|Windows 11|
