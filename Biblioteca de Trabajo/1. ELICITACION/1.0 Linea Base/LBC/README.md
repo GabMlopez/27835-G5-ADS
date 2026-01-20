@@ -1,12 +1,24 @@
-# Línea Base LBC - Implementación
-Esta carpeta contiene el código fuente para los módulos de frontend y backend del proyecto Hoptolt
+# Código Fuente (CF)
 
-## Contenido principal:
-* Código fuente frontend y backend
-* Configuraciones y archivos del proyecto (package.json, eslint.config.js, etc.)
-* Documentos guía para el uso de las herramientas implementadas(plugins, frameworks, etc.)
-## Fecha de inicio:
-10 de Diciembre de 2025
+Este directorio contiene los archivos por versiones correspondiente al código fuente  del proyecto **Hoptolt**.
 
-## Responsables:
-Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja
+## Información del ECS
+
+- **Código del ECS:** CF
+- **Nombre del ECS:** Código Fuente 
+- **Autor:** Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
+- **Proyecto:** Hoptolt
+- **Línea base:** LBC - Línea Base de Código
+- **Localización:** ```C:\27835_G5_ADS\Biblioteca Maestra/"1. ELICITACION"/"1.0 Linea Base"/LBC/```
+- **Tipo de ECS:** Software (Código Fuente)
+- **Fecha de creación:** 09/12/2025
+- **ID del proyecto:** 27835_G5_ADS
+
+# Historial de Versiones del Código Fuente 
+
+| Versión     | Fecha      | Responsable     | Aprobado por                                                  |
+| ----------- | ---------- | --------------- | ------------------------------------------------------------- |
+| `CodigoProyecto_V1.0.0` | 10/12/2025 | Diego Delgado y Kevin Asmal   | La versión fue aprobada por Gabriel López y Marcelo Pareja |
+| `CodigoProyecto_V2.0.0` | 21/12/2025 | Gabriel López y Digo Delgado| La versión fue aprobada por Marcelo Pareja                  |
+| `CodigoProyecto_V3.0.0` | 08/01/2025 | Gabriel López | La versión fue aprobada por  Marcelo Pareja  |
+| `CodigoProyecto_V4.0.0` | 15/01/2025 | Marcelo Pareja y Diego Delgado| La versión fue aprobada por Gabriel López   |

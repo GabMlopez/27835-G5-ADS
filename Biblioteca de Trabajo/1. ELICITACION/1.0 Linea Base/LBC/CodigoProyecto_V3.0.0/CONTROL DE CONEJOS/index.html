@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sistema de Control - Conejos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">Hoptolt</div>
+      <nav>
+        <button class="nav-btn active" data-view="alimentacion">Controlar Alimentación</button>
+        <button class="nav-btn" data-view="vacunacion">Controlar Vacunación</button>
+        <button class="nav-btn" data-view="desparasitacion">Controlar Desparasitación</button>
+        <button class="nav-btn" data-view="crecimiento">Controlar Crecimiento</button>
+        <button class="nav-btn" data-view="reproduccion">Gestionar Reproducción</button>
+        <button class="nav-btn" data-view="eliminarParto">Eliminar Parto</button>
+      </nav>
+      <div class="side-actions">
+        <button class="primary">Registrar Monta</button>
+        <button>Eliminar Parto</button>
+        <button class="back">← Regresar</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Cabecera -->
+      <header class="main-header">
+        <h1 id="view-title">Controlar Alimentación</h1>
+      </header>
+
+      <section class="content">
+
+        <!-- ALIMENTACIÓN -->
+        <div class="view" id="alimentacion">
+          <div class="controls">
+            <label>Buscar por
+              <select id="filtro-alimentacion">
+                <option value="codigo">Código</option>
+                <option value="jaula">Número de Jaula</option>
+                <option value="edad">Edad</option>
+              </select>
+            </label>
+
+            <label>Buscar por Código
+              <input id="buscar-codigo-alim" placeholder="Ingrese código de la coneja" />
+            </label>
+
+            <label class="select-all"><input type="checkbox" id="selectAllAlim"/> Seleccionar todos</label>
+
+            <div class="info">Nota: La dieta recomendada = 20 g por kg de peso (T = P × 20 g). 70% heno, 20% hierba, 10% balanceado. Dos raciones diarias.</div>
+
+            <div class="actions">
+              <button id="registrarAlimentacion" class="primary">Registrar Alimentación</button>
+            </div>
+          </div>
+
+          <table class="data-table" id="tabla-alim">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Edad (meses)</th>
+                <th>Sexo</th>
+                <th>Peso (kg)</th>
+                <th>Dieta Recom.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- filas ejemplo -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- VACUNACIÓN -->
+        <div class="view hidden" id="vacunacion">
+          <div class="controls">
+            <label>Buscar por
+              <select id="filtro-vacuna">
+                <option value="codigo">Código</option>
+                <option value="jaula">Número de Jaula</option>
+              </select>
+            </label>
+
+            <label>Buscar por Código
+              <input id="buscar-codigo-vac" placeholder="Ingrese código" />
+            </label>
+
+            <label class="select-all"><input type="checkbox" id="selectAllVac"/> Seleccionar todos</label>
+
+            <div class="actions">
+              <button id="registrarVacunacion" class="primary">Registrar Vacunación</button>
+            </div>
+          </div>
+
+          <table class="data-table" id="tabla-vac">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Edad</th>
+                <th>Última Vacuna</th>
+                <th>Vacunas</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- DESPARASITACIÓN -->
+        <div class="view hidden" id="desparasitacion">
+          <div class="controls">
+            <label>Buscar por
+              <select id="filtro-despar">
+                <option value="codigo">Código</option>
+                <option value="jaula">Número de Jaula</option>
+              </select>
+            </label>
+
+            <label>Buscar por Código
+              <input id="buscar-codigo-despar" placeholder="Ingrese código" />
+            </label>
+
+            <label class="select-all"><input type="checkbox" id="selectAllDespar"/> Seleccionar todos</label>
+
+            <div class="actions">
+              <button id="registrarDespar" class="primary">Registrar Desparasitación</button>
+            </div>
+          </div>
+
+          <table class="data-table" id="tabla-despar">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Edad</th>
+                <th>Última Despar.</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- CRECIMIENTO -->
+        <div class="view hidden" id="crecimiento">
+          <div class="controls">
+            <label><input type="checkbox" id="autoEdad"/> Actualizar edad automáticamente al ingresar (meses)</label>
+            <label>Incremento de peso (kg) a aplicar a seleccionados
+              <input id="incrementoPeso" type="number" step="0.01" min="-2" max="5" placeholder="ej. 0.1" />
+            </label>
+            <label class="select-all"><input type="checkbox" id="selectAllCrec"/> Seleccionar todos</label>
+            <div class="actions">
+              <button id="aplicarCrecimiento" class="primary">Aplicar Incremento</button>
+            </div>
+          </div>
+
+          <table class="data-table" id="tabla-crec">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Edad (meses)</th>
+                <th>Sexo</th>
+                <th>Peso (kg)</th>
+                <th>Vacunas</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- REPRODUCCIÓN / REGISTRAR MONTA -->
+        <div class="view hidden" id="reproduccion">
+          <div class="controls">
+            <label>Buscar por
+              <select id="filtro-repro">
+                <option value="codigo">Código</option>
+                <option value="jaula">Número de Jaula</option>
+              </select>
+            </label>
+
+            <label>Buscar por Código
+              <input id="buscar-codigo-repro" placeholder="Ingrese código" />
+            </label>
+
+            <label class="select-all"><input type="checkbox" id="selectAllRepro"/> Seleccionar todos</label>
+
+            <div class="actions">
+              <button id="abrirFormMonta" class="primary">Registrar Monta</button>
+            </div>
+          </div>
+
+          <table class="data-table" id="tabla-repro">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Edad</th>
+                <th>Sexo</th>
+                <th>Fecha Monta</th>
+                <th>Fecha Parto</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <!-- Form modal simple -->
+          <div class="modal hidden" id="modalMonta">
+            <div class="modal-content">
+              <h3>Registrar Monta</h3>
+              <div id="infoConeja"></div>
+              <label>Fecha de Monta
+                <input id="fechaMonta" type="date" />
+              </label>
+              <div>Fecha estimada de parto: <span id="fechaParto">-</span></div>
+              <label>Justificación (opcional)
+                <textarea id="justificacionMonta" rows="3"></textarea>
+              </label>
+              <div class="modal-actions">
+                <button id="guardarMonta" class="primary">Guardar</button>
+                <button id="cancelMonta">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ELIMINAR PARTO -->
+        <div class="view hidden" id="eliminarParto">
+          <div class="controls">
+            <label>Buscar por
+              <select id="filtro-eliminar">
+                <option value="codigo">Código</option>
+                <option value="jaula">Número de Jaula</option>
+              </select>
+            </label>
+            <label>Buscar por Código
+              <input id="buscar-codigo-eliminar" placeholder="Ingrese código" />
+            </label>
+          </div>
+
+          <table class="data-table" id="tabla-eliminar">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Número de Jaula</th>
+                <th>Código</th>
+                <th>Fecha Monta</th>
+                <th>Fecha Parto</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Datos de ejemplo (en un app real vendrían de la BD)
+    const conejos = [
+      {id:1, jaula:1, codigo:'R001', edad:6, sexo:'hembra', peso:2.5, ultimaVacuna:'2024-07-01', ultimaDespar:'2025-10-01', fechaMonta:null, fechaParto:null},
+      {id:2, jaula:2, codigo:'D002', edad:8, sexo:'hembra', peso:3.1, ultimaVacuna:'2023-11-10', ultimaDespar:'2025-11-01', fechaMonta:null, fechaParto:null},
+      {id:3, jaula:3, codigo:'L003', edad:4, sexo:'hembra', peso:1.8, ultimaVacuna:'2022-12-01', ultimaDespar:'2025-08-01', fechaMonta:null, fechaParto:null},
+      {id:4, jaula:4, codigo:'M004', edad:3, sexo:'macho', peso:2.2, ultimaVacuna:'2024-05-01', ultimaDespar:'2025-09-01', fechaMonta:null, fechaParto:null}
+    ];
+
+    // Estado de registros de alimentación por fecha (simulación)
+    const registrosAlimentacionHoy = {}; // codigo -> cantidad
+
+    // Utilidades
+    const qs = s => document.querySelector(s);
+    const qsa = s => Array.from(document.querySelectorAll(s));
+
+    // Navegación entre vistas
+    qsa('.nav-btn').forEach(btn=>btn.addEventListener('click', e=>{
+      qsa('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.dataset.view;
+      qsa('.view').forEach(v=>v.classList.add('hidden'));
+      qs('#'+view).classList.remove('hidden');
+      qs('#view-title').textContent = btn.textContent;
+      renderAllTables();
+    }));
+
+    // Render tablas
+    function renderAllTables(){
+      renderTable('tabla-alim', true);
+      renderTable('tabla-vac');
+      renderTable('tabla-despar');
+      renderTable('tabla-crec');
+      renderTable('tabla-repro');
+      renderTable('tabla-eliminar');
+    }
+
+    function renderTable(id, calcularDieta=false){
+      const tbody = qs('#'+id+' tbody');
+      tbody.innerHTML = '';
+      conejos.forEach(c=>{
+        const tr = document.createElement('tr');
+        const checkedCell = document.createElement('td');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.dataset.codigo = c.codigo;
+        checkedCell.appendChild(checkbox);
+        tr.appendChild(checkedCell);
+
+        tr.innerHTML += `<td>${c.jaula}</td><td>${c.codigo}</td><td>${c.edad}</td><td>${c.sexo}</td>`;
+        if(id==='tabla-alim'){
+          tr.innerHTML += `<td>${c.peso.toFixed(2)}</td>`;
+          const dieta = calcularDieta ? calculaDieta(c.peso) : '';
+          tr.innerHTML += `<td class="dieta">${dieta}</td>`;
+        }
+        if(id==='tabla-vac'){
+          tr.innerHTML += `<td>${c.ultimaVacuna || '-'}</td>`;
+          tr.innerHTML += `<td>
+            <label><input type="checkbox" value="mixomatosis"/> Mixomatosis</label><br>
+            <label><input type="checkbox" value="vhd"/> VHD</label>
+          </td>`;
+        }
+        if(id==='tabla-despar'){
+          tr.innerHTML += `<td>${c.ultimaDespar || '-'}</td>`;
+        }
+        if(id==='tabla-crec'){
+          tr.innerHTML += `<td>${c.sexo}</td><td>${c.peso.toFixed(2)}</td><td>-</td>`;
+        }
+        if(id==='tabla-repro'){
+          tr.innerHTML += `<td>${c.sexo}</td><td>${c.fechaMonta||'-'}</td><td>${c.fechaParto||'-'}</td>`;
+        }
+        if(id==='tabla-eliminar'){
+          tr.innerHTML += `<td>${c.fechaMonta||'-'}</td><td>${c.fechaParto||'-'}</td>`;
+          tr.innerHTML += `<td><button class="btn-eliminar" data-codigo="${c.codigo}">Eliminar parto</button></td>`;
+        }
+        tbody.appendChild(tr);
+      });
+    }
+
+    function calculaDieta(pesoKg){
+      // T(g/día) = P * 20g  (P en kg)
+      const T = pesoKg * 20;
+      const heno = Math.round(T * 0.7);
+      const hierba = Math.round(T * 0.2);
+      const balanceado = Math.round(T * 0.1);
+      return `${T.toFixed(1)} g/día → ${heno}g heno, ${hierba}g hierba, ${balanceado}g balanceado (2 raciones)`;
+    }
+
+    // SELECT ALL handlers
+    qsa('#selectAllAlim, #selectAllVac, #selectAllDespar, #selectAllCrec, #selectAllRepro').forEach(ch=>{
+      ch.addEventListener('change', e=>{
+        const section = ch.id.replace('selectAll','').toLowerCase();
+        const selector = section==='alim' ? '#tabla-alim' : '#tabla-'+section;
+        const checkboxes = document.querySelectorAll(selector+' tbody input[type=checkbox]');
+        checkboxes.forEach(cb=>cb.checked = ch.checked);
+      });
+    });
+
+    // Registrar alimentación
+    qs('#registrarAlimentacion').addEventListener('click', ()=>{
+      const seleccionadas = Array.from(qs('#tabla-alim tbody').querySelectorAll('input[type=checkbox]:checked'))
+        .map(i=>i.dataset.codigo);
+      if(seleccionadas.length===0){ alert('Debe seleccionar al menos una coneja.'); return; }
+
+      // verificar registros hoy
+      let totalRegHoy = 0;
+      seleccionadas.forEach(c=> totalRegHoy += (registrosAlimentacionHoy[c]||0));
+
+      if(totalRegHoy >= 2){
+        const continuar = confirm('Ya ha registrado la alimentación dos veces hoy. ¿Desea registrar una vez más?');
+        if(!continuar) return;
+        const just = prompt('Ingrese justificación (obligatoria)');
+        if(!just || just.trim()===''){ alert('Justificación obligatoria. Registro cancelado.'); return; }
+        // simular guardado con justificación
+      }
+
+      // incrementar contador de registros
+      seleccionadas.forEach(c=> registrosAlimentacionHoy[c] = (registrosAlimentacionHoy[c]||0) + 1);
+      alert('Se registró la alimentación con éxito.');
+    });
+
+    // Registrar vacunación
+    qs('#registrarVacunacion').addEventListener('click', ()=>{
+      const rows = Array.from(qs('#tabla-vac tbody tr'));
+      const seleccionadas = rows.filter(r=> r.querySelector('input[type=checkbox]') && r.querySelector('input[type=checkbox]:checked'));
+      // For simplicity, take any checked within the vaccines cell
+      const checkedBoxes = Array.from(qs('#tabla-vac tbody input[type=checkbox]:checked'));
+      if(checkedBoxes.length===0){ alert('Debe seleccionar al menos una vacuna.'); return; }
+
+      // validate each selected rabbit vaccine date (1 year rule)
+      const today = new Date();
+      let error = false;
+      checkedBoxes.forEach(cb=>{
+        // find codigo from row
+        const row = cb.closest('tr');
+        const codigo = row.children[2].textContent;
+        const conejo = conejos.find(c=>c.codigo===codigo);
+        if(!conejo) return;
+        if(!conejo.ultimaVacuna){ return; }
+        const ultima = new Date(conejo.ultimaVacuna);
+        const diff = (today - ultima) / (1000*60*60*24);
+        if(diff < 365){
+          alert(`La última vacuna del conejo ${codigo} fue el ${conejo.ultimaVacuna}. Debe pasar al menos 1 año para ingresar otra vacuna.`);
+          error = true;
+        }
+      });
+      if(error) return;
+      alert('Se registró el control de vacunación');
+    });
+
+    // Registrar desparasitación
+    qs('#registrarDespar').addEventListener('click', ()=>{
+      const checked = Array.from(qs('#tabla-despar tbody input[type=checkbox]:checked'));
+      if(checked.length===0){ alert('Debe seleccionar al menos una coneja.'); return; }
+      const hoy = new Date();
+      for(const cb of checked){
+        const row = cb.closest('tr');
+        const codigo = row.children[2].textContent;
+        const conejo = conejos.find(c=>c.codigo===codigo);
+        if(!conejo) continue;
+        if(conejo.ultimaDespar){
+          const ultima = new Date(conejo.ultimaDespar);
+          const diff = (hoy - ultima) / (1000*60*60*24);
+          if(diff < 30){ alert(`La última desparasitación del conejo ${codigo} fue el ${conejo.ultimaDespar}. Debe pasar 1 mes.`); return; }
+        }
+      }
+      alert('Se registró el control de desparasitación');
+    });
+
+    // Crecimiento: aplicar incremento
+    qs('#aplicarCrecimiento').addEventListener('click', ()=>{
+      const inc = parseFloat(qs('#incrementoPeso').value);
+      if(isNaN(inc)){ alert('Ingrese un incremento válido.'); return; }
+      const checked = Array.from(qs('#tabla-crec tbody input[type=checkbox]:checked'));
+      if(checked.length===0){ alert('Seleccione al menos un conejo.'); return; }
+      for(const cb of checked){
+        const row = cb.closest('tr');
+        const codigo = row.children[2].textContent;
+        const conejo = conejos.find(c=>c.codigo===codigo);
+        if(!conejo) continue;
+        const nuevo = conejo.peso + inc;
+        if(nuevo > 5){ alert(`El peso resultante de ${codigo} supera el máximo permitido (5kg).`); return; }
+        if(nuevo > 4.5){ alert(`Alerta: ${codigo} supera 4.5kg. Revise la salud del conejo.`); }
+        if(nuevo < 0){ alert('Peso inválido'); return; }
+        conejo.peso = parseFloat(nuevo.toFixed(2));
+      }
+      alert('Incremento aplicado correctamente');
+      renderAllTables();
+    });
+
+    // Reproducción: abrir modal de monta
+    qs('#abrirFormMonta').addEventListener('click', ()=>{
+      // tomar primer seleccionado que sea hembra y edad>=4
+      const checked = Array.from(qs('#tabla-repro tbody input[type=checkbox]:checked'));
+      if(checked.length===0){ alert('Seleccione al menos una coneja.'); return; }
+      const fila = checked.find(cb=>{
+        const codigo = cb.dataset.codigo;
+        const c = conejos.find(x=>x.codigo===codigo);
+        return c && c.sexo==='hembra' && c.edad>=4;
+      });
+      if(!fila){ alert('Seleccione una coneja hembra de al menos 4 meses.'); return; }
+      const codigo = fila.dataset.codigo;
+      const coneja = conejos.find(x=>x.codigo===codigo);
+      qs('#infoConeja').textContent = `Coneja: ${coneja.codigo} — Jaula ${coneja.jaula}`;
+      qs('#fechaMonta').value='';
+      qs('#fechaParto').textContent='-';
+      qs('#modalMonta').classList.remove('hidden');
+    });
+
+    qs('#fechaMonta').addEventListener('change', ()=>{
+      const f = qs('#fechaMonta').value;
+      if(!f) { qs('#fechaParto').textContent='-'; return; }
+      const fecha = new Date(f);
+      fecha.setDate(fecha.getDate()+30);
+      qs('#fechaParto').textContent = fecha.toISOString().slice(0,10);
+    });
+
+    qs('#guardarMonta').addEventListener('click', ()=>{
+      const fecha = qs('#fechaMonta').value;
+      if(!fecha){ alert('La fecha de monta es obligatoria.'); return; }
+      const info = qs('#infoConeja').textContent;
+      const codigo = info.split(' ')[1];
+      const coneja = conejos.find(c=>c.codigo===codigo);
+      if(!coneja) return;
+      if(coneja.fechaParto){ alert('Esta coneja ya tiene una monta activa.'); return; }
+      coneja.fechaMonta = fecha;
+      const p = new Date(fecha); p.setDate(p.getDate()+30);
+      coneja.fechaParto = p.toISOString().slice(0,10);
+      alert('Se registró la fecha de monta');
+      qs('#modalMonta').classList.add('hidden');
+      renderAllTables();
+    });
+
+    qs('#cancelMonta').addEventListener('click', ()=> qs('#modalMonta').classList.add('hidden'));
+
+    // Eliminar parto
+    document.addEventListener('click', e=>{
+      if(e.target.classList.contains('btn-eliminar')){
+        const codigo = e.target.dataset.codigo;
+        if(confirm(`¿Seguro que desea eliminar el parto de ${codigo}?`)){
+          const conejo = conejos.find(c=>c.codigo===codigo);
+          if(conejo){ conejo.fechaMonta = null; conejo.fechaParto = null; alert('El parto ha sido eliminado con éxito.'); renderAllTables(); }
+        }
+      }
+    });
+
+    // inicializar
+    renderAllTables();
+  </script>
+</body>
+</html>

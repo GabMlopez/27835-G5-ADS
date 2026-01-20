@@ -17,6 +17,11 @@ const crear_conejo = async (req, res) => {
 const obtener_conejos = async (req, res) => {
     try {
         const conejos = await conejo_servicio.obtener_conejos();
+        if(conejos ===null){
+            res.status(400).json({
+                message:'No existe conejos registradas'
+            });
+        } 
         res.status(200).json(conejos);
     } catch (error) {
         res.status(500).json({

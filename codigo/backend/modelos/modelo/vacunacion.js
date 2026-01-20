@@ -2,11 +2,11 @@ const {DataTypes, Op} = require('sequelize');
 const sequelize = require('../base_de_datos/sequelize');
 const conejo = require('./conejo');
 
-const vacunacion = sequelize.define('vacunacion', {
+const Vacunacion = sequelize.define('vacunacion', {
     vacunacion_id: {
         type: DataTypes.STRING(32),
         primaryKey: true,
-        allowNull: false,
+        allowNull: true,
     },
     vacunacion_fecha: {
         type: DataTypes.DATE,
@@ -40,7 +40,7 @@ const vacunacion = sequelize.define('vacunacion', {
     }
 });
 
-vacunacion.prototype.generar_siguiente_id = async function() {
+Vacunacion.prototype.generar_siguiente_id = async function() {
   const ultima_vacunacion = await Vacunacion.findOne({
     order: [['vacunacion_id', 'DESC']],
     where: { vacunacion_id: { [Op.like]: 'V%' } }
@@ -58,7 +58,7 @@ vacunacion.prototype.generar_siguiente_id = async function() {
   this.vacunacion_id = 'V' + String(numero_secuencial).padStart(6, '0');
 }
 
-vacunacion.prototype.validar_entrada = async function() {
+Vacunacion.prototype.validar_entrada = async function() {
     if (!this.conejo_id) {
         throw new Error('El ID del conejo es requerido');
     }
@@ -79,4 +79,4 @@ vacunacion.prototype.validar_entrada = async function() {
     }
 };
 
-module.exports = vacunacion;
+module.exports = Vacunacion;

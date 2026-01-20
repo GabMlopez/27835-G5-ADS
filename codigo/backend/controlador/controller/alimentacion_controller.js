@@ -33,6 +33,11 @@ const obtener_alimentaciones_por_conejo = async (req, res) => {
     try {
         const conejo_id = req.params.conejo_id;
         const alimentaciones = await alimentacion_servicio.obtener_alimentaciones_por_conejo(conejo_id);
+        if(alimentaciones ===null){
+            res.status(400).json({
+                message:'No existe una dalimnetación para este id de conejo'
+            });
+        } 
         res.status(200).json(alimentaciones);
     }
     catch (error) {
@@ -45,6 +50,11 @@ const obtener_alimentaciones_por_conejo = async (req, res) => {
 const obtener_lista_alimentacion = async (req, res) => {
     try {
         const alimentaciones = await alimentacion_servicio.obtener_lista_alimentacion();
+        if(alimentaciones ===null){
+            res.status(400).json({
+                message:'No existe alimentaciones registradas'
+            });
+        } 
         res.status(200).json(alimentaciones);
     } catch (error) {
         res.status(500).json({

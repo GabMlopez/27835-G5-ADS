@@ -1,5 +1,5 @@
-const Vacunacion = require('....//modelos/modelo/vacunacion');
-const Conejo = require('../modelos/modelo/conejo');
+const Vacunacion = require('../../modelos/modelo/vacunacion');
+const Conejo = require('../../modelos/modelo/conejo');
 const { Op } = require('sequelize');
 
 
@@ -26,6 +26,16 @@ async function validar_vacunacion_anual(conejo_id, vacunacion_fecha, vacunacion_
 
 async function crear_vacunacion_para_conejo(datos) {
   const { conejo_id, vacunacion_fecha, vacunacion_tipo } = datos;
+
+  if (!conejo_id) {
+    throw new Error('El ID de la jaula es requerido');
+  }
+  if (!vacunacion_fecha) {
+    throw new Error('La fecha de vacunación es requerida');
+  }
+  if (!['Mixomatosis', 'VHD'].includes(vacunacion_tipo)) {
+    throw new Error('Tipo de vacunación inválido');
+  }
 
   await validar_vacunacion_anual(conejo_id, vacunacion_fecha, vacunacion_tipo);
 
@@ -106,7 +116,6 @@ async function actualizar_vacunacion(vacunacion_id, datos_actualizacion) {
   if (datos_actualizacion.vacunacion_fecha || datos_actualizacion.vacunacion_tipo) {
     const nueva_fecha = datos_actualizacion.vacunacion_fecha || vacunacion.vacunacion_fecha;
     const nuevo_tipo = datos_actualizacion.vacunacion_tipo || vacunacion.vacunacion_tipo;
-    await validar_vacunacion_anual(vacunacion.conejo_id, nueva_fecha, nuevo_tipo);
   }
 
   return await vacunacion.update(datos_actualizacion);

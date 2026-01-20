@@ -6,8 +6,7 @@ const createPen = async (req, res) => {
     const nueva_jaula = await jaula_servicio.crear_jaula(datos);
 
     res.status(201).json({
-      message: 'Jaula creada exitosamente',
-      jaula: nueva_jaula
+      message: 'Jaula creada exitosamente'
     });
   } catch (error) {
     res.status(400).json({
@@ -19,6 +18,11 @@ const createPen = async (req, res) => {
 const getPens = async (req, res) => {
   try {
     const jaulas = await jaula_servicio.obtener_jaulas();
+    if(jaulas ===null){
+            res.status(400).json({
+                message:'No existe jaulas registradas'
+            });
+        } 
     res.status(200).json(jaulas);
   } catch (error) {
     res.status(500).json({
@@ -47,8 +51,7 @@ const updatePen = async (req, res) => {
     const datos_actualizacion = req.body;
     const jaula_actualizada = await jaula_servicio.actualizar_jaula(jaula_id, datos_actualizacion);
     res.status(200).json({
-      message: 'Jaula actualizada exitosamente',
-      jaula: jaula_actualizada
+      message: 'Jaula actualizada exitosamente'
     });
   } catch (error) {
     res.status(400).json({

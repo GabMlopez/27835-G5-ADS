@@ -43,7 +43,7 @@ const desparasitacion = sequelize.define('desparasitacion', {
 });
 
 desparasitacion.prototype.generarId = async function() {
-  const ultima_desparasitacion = await Desparasitacion.findOne({
+  const ultima_desparasitacion = await desparasitacion.findOne({
     order: [['desparasitacion_id', 'DESC']],
     where: { desparasitacion_id: { [Op.like]: 'DES%' } }
   });

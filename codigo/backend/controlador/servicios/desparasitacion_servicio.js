@@ -1,5 +1,5 @@
 const Desparasitacion = require('../../modelos/modelo/desparasitacion');
-const Conejo = require('../models/conejo');
+const Conejo = require('../../modelos/modelo/conejo');
 const { Op } = require('sequelize');
 
 

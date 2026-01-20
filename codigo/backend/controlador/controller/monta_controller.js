@@ -14,6 +14,11 @@ exports.create_reproduccion = async (req, res) => {
 exports.get_reproducciones = async (req, res) => {
     try{
         const reproducciones = await monta_servicio.obtener_reproducciones();
+        if(reproducciones ===null){
+            res.status(400).json({
+                message:'No existen reproducciones registradas'
+            });
+        } 
         res.status(200).json(reproducciones);
     }
     catch(error){
@@ -25,6 +30,11 @@ exports.get_reproducciones_por_conejo = async (req, res) => {
     try{
         const { conejo_id } = req.params;
         const reproducciones = await monta_servicio.obtener_reproducciones_por_conejo(conejo_id);
+        if(reproducciones === null){
+            res.status(400).json({
+                message:'No existen reproducciones registradas para este conejo'
+            });
+        } 
         res.status(200).json(reproducciones);
     }
     catch(error){
