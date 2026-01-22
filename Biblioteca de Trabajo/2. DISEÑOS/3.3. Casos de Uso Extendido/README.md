@@ -1,1 +1,20 @@
 # 27835-G5-ADS
+
+# Diagrama de Casos de Uso
+Esta carpeta contiene los diagramas de casos de uso obtenidos mediante la elicitación de requisitos para el sistema Hoptolt.
+
+## Contenido principal:
+* Documento CU (Casos de Uso)
+## Fecha de inicio:
+11 de diciembre de 2025
+
+## Responsables:
+Diego Delgado
+
+# 📌 Versiones y Variantes
+
+| Código del ECS | Descripción del ECS                 | Versión | Fecha de creación | Autor(es)     | Localización                                                                                          | Observaciones       | Variante de requisitos de usuario | Variante de plataforma |
+|---------------|-------------------------------------|----------|------------------|---------------|-------------------------------------------------------------------------------------------------------|---------------------|----------------------------------|------------------------|
+| CU-01 | Diagrama de Casos de Uso Extendido  | V1.0.0   | 11/12/2025       | Diego Delgado | 27835-G5-ADS/Biblioteca de Trabajo/2.DISEÑOS/3.3.Casos_de_Uso_Extendido/CU_Extendido_Hoptolt_V1.0.0    | Documento inicial   | Español                          | Windows 11             |
+| CU-02| Diagrama de Casos de Uso Extendido  | V2.0.0   | 20/12/2025       | Diego Delgado | 27835-G5-ADS/Biblioteca de Trabajo/2.DISEÑOS/3.3.Casos_de_Uso_Extendido/CU_Extendido_Hoptolt_V2.0.0    | Segunda versión     | Español                          | Windows 11             |
+
