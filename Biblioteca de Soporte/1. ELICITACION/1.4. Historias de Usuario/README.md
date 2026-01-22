@@ -1,14 +1,23 @@
-# Historias de usuario
-## Contenido
-Matriz de Historias de usuario(MHU) construida en base al documento de requisitos (ERS) del proyecto Hoptolt
-## Fecha de Inicio
-13 de Noviembre de 2025
-## Responsables
-Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja
-## Versionamiento
-|Código | Descripción | Versión | Fecha de Creación | Autores | Ubicación | Observaciones | Variante de Requisito | Variante de plataforma |
-|- | - | - | - | - | - | - | - | - |
-|MHU|Matriz de Historias de Usuario|1.0.0|13-02-2025|Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja|```/Biblioteca de Trabajo/1.ELICITACION/Historias de Usuario/```|Versión Inicial|Español|Windows 11|
-|MHU|Matriz de Historias de Usuario|1.1|13-02-2025|Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja|```/Biblioteca de Trabajo/1.ELICITACION/Historias de Usuario/```|Historias de usuario completadas|Español|Windows 11|
-|MHU|Matriz de Historias de Usuario|1.2|13-02-2025|Gabriel López|```/Biblioteca de Trabajo/1.ELICITACION/Historias de Usuario/```|Separación de la HU de gestión de la alimentación de conejos en "crear un plan de alimentación" "modificar planes de alimentación existentes"|Español|Windows 11|
-|MHU|Matriz de Historias de Usuario|2.0|13-02-2025|Marcelo Pareja|```/Biblioteca de Soporte/1.ELICITACION/Historias de Usuario/```| Asociación de las HU con los requisitos del proyecto. Cambio de nomenclatura (ej: REQ 001 -> Req 1.1)|Español|Windows 11|
+# Matriz de Historias de Usuario (HU)
+
+Este directorio contiene los archivos por versiones correspondientes a la Matriz de Historias de Usuario del proyecto **Hoptolt**
+
+## Información del ECS
+
+- **Código del ECS:** HU
+- **Nombre del ECS:** Matriz de Historias de Usuario
+- **Autor:** Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
+- **Proyecto:** Hoptolt
+- **Localización:** ```C:\27835_G5_ADS\Biblioteca de Trabajo/1. ELICITACION/1.4 Historias de Usuario/```
+- **Tipo de ECS:** Matriz
+- **Fecha de creación:** 13/12/2025
+- **ID del proyecto:** 27835_G5_ADS
+
+# Historial de Versiones de la Matriz de Historias de Usuario
+
+| Versión     | Fecha      | Responsable     |   Aprobado por                                                  |
+| ----------- | ---------- | --------------- | ------------------------------------------------------------- |
+| `G5_Matriz de Marco de Trabajo HU_V1.0.xlsx` | 13/12/2025 | Diego Delgado y Kevin Asmal   | La versión fue aprobada por Gabriel López y Marcelo Pareja |
+| `G5_Matriz de Marco de Trabajo HU_V1.1.xlsx` | 17/12/2025 | Gabriel López y Digo Delgado| La versión fue aprobada por Marcelo Pareja                  |
+| `G5_Matriz de Marco de Trabajo HU_V1.2.xlsx` | 18/12/2025 | Gabriel López | La versión fue aprobada por  Marcelo Pareja  |
+| `G5_Matriz de Marco de Trabajo HU_V2.0.xlsx` | 11/12/2025 | Marcelo Pareja| La versión fue aprobada por Gabriel López   |
