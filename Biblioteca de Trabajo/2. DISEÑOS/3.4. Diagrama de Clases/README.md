@@ -1,5 +1,5 @@
 # 27835-G5-ADS
-# Diagrama de calses
+# Diagrama de clases
 Esta carpeta contiene los diagramas de clases obtenidos mediante la elicitación de requisitos para el sistema Hoptolt.
 
 ## Contenido principal:
