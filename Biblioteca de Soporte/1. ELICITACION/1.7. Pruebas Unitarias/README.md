@@ -17,4 +17,4 @@
 
 | Versión     | Fecha      | Responsable     |   Aprobado por                                                  |
 | ----------- | ---------- | --------------- | ------------------------------------------------------------- |
-| `G5_Matriz_IREB_V1.0.xlsx` | 21/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López|
+| `Plan_Pruebas_HoptoltV1.0.docx.pdf` | 21/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López|
