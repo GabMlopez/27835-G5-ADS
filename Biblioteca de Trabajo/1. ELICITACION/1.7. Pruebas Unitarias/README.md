@@ -17,4 +17,5 @@
 
 | Versión     | Fecha      | Responsable     |   Aprobado por                                                  |
 | ----------- | ---------- | --------------- | ------------------------------------------------------------- |
-| `Plan_Pruebas_HoptoltV1.0.docx.pdf` | 21/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López|
+| `Plan_Pruebas_HoptoltV1.0.pdf` | 21/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López|
+| `Plan_Pruebas_HoptoltV2.0.pdf` | 25/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López|
