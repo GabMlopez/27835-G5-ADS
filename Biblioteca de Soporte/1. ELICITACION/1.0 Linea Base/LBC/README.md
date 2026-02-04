@@ -2,9 +2,9 @@
 Esta carpeta contiene el código fuente para los módulos de frontend y backend del proyecto Hoptolt
 
 ## Contenido principal:
-* Código fuente frontend y backend
+* Código fuente del frontend y el backend
 * Configuraciones y archivos del proyecto (package.json, eslint.config.js, etc.)
-* Documentos guía para el uso de las herramientas implementadas(plugins, frameworks, etc.)
+* Documentos guía para el uso de las herramientas que se implementaron el (plugins, frameworks, etc.)
 ## Fecha de inicio:
 10 de Diciembre de 2025
 
