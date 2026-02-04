@@ -1,15 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useConejos from '../../hooks/useConejos';
+import { registrar_vacunacion_conejo } from '../../servicios/vacunacion_servicios';
+import { registrar_desparasitacion_conejo } from '../../servicios/desparasitacion_servicios';
 
 export default function GestionarVacunacion() {
     const navigate = useNavigate();
+    const { conejos, loading } = useConejos();
+    const [filtro, set_filtro] = useState('');
+    const [mensaje, set_mensaje] = useState(null);
 
-    const data = [
-        { jaula: 1, codigo: "R001", edad: 5, sexo: "hembra", vacuna: "Se aplicó? Mixomatosis VHD", desparacitacion: "Se aplicó?" },
-        { jaula: 2, codigo: "L005", edad: 4, sexo: "macho", vacuna: "Se aplicó? Mixomatosis VHD", desparacitacion: "Se aplicó?" },
-        { jaula: 3, codigo: "L002", edad: 8, sexo: "macho", vacuna: "Se aplicó? Mixomatosis VHD", desparacitacion: "Se aplicó?" },
-        { jaula: 4, codigo: "R004", edad: 5, sexo: "macho", vacuna: "Se aplicó? Mixomatosis VHD", desparacitacion: "Se aplicó?" },
-    ];
+    const conejos_filtrados = conejos.filter(c =>
+        c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
+        c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase())
+    );
+
+    const handle_vacunar = async (conejo) => {
+        const datos = {
+            conejo_id: conejo.conejo_id,
+            vacunacion_tipo: 'Mixomatosis VHD',
+            vacunacion_fecha: new Date().toISOString()
+        };
+
+        try {
+            const res = await registrar_vacunacion_conejo(datos);
+            if (res.ok) {
+                set_mensaje({ tipo: 'success', texto: `Vacuna registrada para ${conejo.conejo_nombre}` });
+            } else {
+                const err = await res.json();
+                set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
+            }
+        } catch (error) {
+            set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
+        }
+        setTimeout(() => set_mensaje(null), 5000);
+    };
+
+    const handle_desparasitar = async (conejo) => {
+        const datos = {
+            conejo_id: conejo.conejo_id,
+            desparasitacion_tipo: 'Interna/Externa',
+            desparasitacion_fecha: new Date().toISOString()
+        };
+
+        try {
+            const res = await registrar_desparasitacion_conejo(datos);
+            if (res.ok) {
+                set_mensaje({ tipo: 'success', texto: `Desparasitación registrada para ${conejo.conejo_nombre}` });
+            } else {
+                const err = await res.json();
+                set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
+            }
+        } catch (error) {
+            set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
+        }
+        setTimeout(() => set_mensaje(null), 5000);
+    };
 
     return (
         <div className="min-h-screen bg-[#d8b4de] p-8 relative">
@@ -18,68 +64,71 @@ export default function GestionarVacunacion() {
             </button>
 
             <div className="max-w-6xl mx-auto mt-12">
-                <div className="flex flex-col md:flex-row justify-between items-start mb-12">
-                    <div className="md:w-1/2">
-                        <h1 className="text-5xl font-bold mb-6 text-black">Gestionar Vacunación</h1>
-                        <p className="text-xl text-gray-800 mb-8">
-                            Registre vacunas, tratamientos y revisiones para mantener un estricto control de la salud animal
-                        </p>
+                <h1 className="text-5xl font-bold mb-6 text-black">Gestionar Controles Médicos</h1>
+                <p className="text-xl text-gray-800 mb-8">
+                    Registre vacunas y desparasitaciones para mantener la salud de sus animales.
+                </p>
 
-                        <h2 className="text-4xl font-bold text-center md:text-left mb-8 text-black">Registro</h2>
-
-                        <div className="mb-8">
-                            <label className="block text-white font-bold mb-2">Buscar por :</label>
-                            <div className="flex gap-4">
-                                <input
-                                    type="text"
-                                    placeholder="Codigo"
-                                    className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
-                                />
-                                <button className="bg-purple-700 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-purple-800 transition">
-                                    <span>★</span> Registrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="md:w-1/3 hidden md:block">
-                        <img src="https://placehold.co/400x400?text=Rabbit+Vet" alt="Rabbit Vet" className="rounded-lg shadow-lg" />
-                    </div>
+                <div className="mb-8">
+                    <label className="block text-white font-bold mb-2">Buscar Conejo:</label>
+                    <input
+                        type="text"
+                        value={filtro}
+                        onChange={(e) => set_filtro(e.target.value)}
+                        placeholder="Código o Nombre"
+                        className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
+                    />
                 </div>
 
+                {mensaje && (
+                    <div className={`mb-6 p-4 rounded-lg ${mensaje.tipo === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {mensaje.texto}
+                    </div>
+                )}
+
                 <div className="bg-white/50 rounded-lg p-6">
-                    <h3 className="text-white font-bold mb-4 text-xl">Seleccionar Conejo</h3>
                     <div className="overflow-x-auto bg-white rounded-lg shadow">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-purple-400 text-white">
-                                    <th className="p-4">Numero de Jaula</th>
-                                    <th className="p-4">Codigo</th>
-                                    <th className="p-4">Edad (meses)</th>
-                                    <th className="p-4">Sexo</th>
-                                    <th className="p-4">Vacuna</th>
-                                    <th className="p-4">Desparacitación</th>
+                                    <th className="p-4">Jaula</th>
+                                    <th className="p-4">Código</th>
+                                    <th className="p-4">Nombre</th>
+                                    <th className="p-4 text-center">Acciones Médicas</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((item, index) => (
-                                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                                        <td className="p-4">{item.jaula}</td>
-                                        <td className="p-4">{item.codigo}</td>
-                                        <td className="p-4">{item.edad}</td>
-                                        <td className="p-4">{item.sexo}</td>
-                                        <td className="p-4 whitespace-pre-line">{item.vacuna}</td>
-                                        <td className="p-4">{item.desparacitacion}</td>
-                                    </tr>
-                                ))}
+                                {loading ? (
+                                    <tr><td colSpan="4" className="p-4 text-center">Cargando...</td></tr>
+                                ) : conejos_filtrados.length === 0 ? (
+                                    <tr><td colSpan="4" className="p-4 text-center">No se encontraron conejos</td></tr>
+                                ) : (
+                                    conejos_filtrados.map((conejo) => (
+                                        <tr key={conejo.conejo_id} className="border-b border-gray-200 hover:bg-gray-50">
+                                            <td className="p-4">{conejo.jaula_id}</td>
+                                            <td className="p-4 font-bold">{conejo.conejo_id}</td>
+                                            <td className="p-4">{conejo.conejo_nombre}</td>
+                                            <td className="p-4 text-center">
+                                                <div className="flex gap-2 justify-center">
+                                                    <button
+                                                        onClick={() => handle_vacunar(conejo)}
+                                                        className="bg-blue-600 text-white px-4 py-2 rounded-full text-xs hover:bg-blue-700"
+                                                    >
+                                                        Vacunar
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handle_desparasitar(conejo)}
+                                                        className="bg-green-600 text-white px-4 py-2 rounded-full text-xs hover:bg-green-700"
+                                                    >
+                                                        Desparasitar
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
-                    </div>
-                    <p className="text-gray-700 mt-4 underline decoration-1">Una vacuna se hace cada año y una desparasitación cada mes</p>
-                    <div className="flex justify-end mt-4">
-                        <button className="bg-white text-purple-700 px-6 py-2 rounded-full shadow hover:bg-gray-100 transition flex items-center gap-2">
-                            <span>★</span> Mostrar todo
-                        </button>
                     </div>
                 </div>
             </div>
