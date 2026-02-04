@@ -7,6 +7,9 @@ import GestionarMontas from './paginas/cuidados/GestionarMontas'
 import GestionarAlimentacion from './paginas/cuidados/GestionarAlimentacion'
 import GestionarVacunacion from './paginas/cuidados/GestionarVacunacion'
 import GestionarJaulas from './paginas/jaulas/GestionarJaulas'
+import GestionarConejos from './paginas/conejos/GestionarConejos'
+import GestionarRazas from './paginas/razas/GestionarRazas'
+
 function App() {
 
   return (
@@ -14,6 +17,8 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/jaulas" element={<GestionarJaulas />} />
+        <Route path="/conejos" element={<GestionarConejos />} />
+        <Route path="/razas" element={<GestionarRazas />} />
         <Route path="/cuidados" element={<ManejoCuidados />} />
         <Route path="/cuidados/montas" element={<GestionarMontas />} />
         <Route path="/cuidados/alimentacion" element={<GestionarAlimentacion />} />
