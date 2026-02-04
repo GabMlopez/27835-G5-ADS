@@ -75,7 +75,7 @@ export default function Menu() {
 
       <nav className="bg-purple-400 text-white sticky top-0 shadow-md z-40">
         <div className="container mx-auto px-4">
-          <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4 text-center">
+          <ul className="grid grid-cols-2 md:grid-cols-5 gap-4 py-4 text-center">
             <li
               className={`py-3 rounded-lg transition ${isActive("/jaulas") ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
@@ -84,21 +84,31 @@ export default function Menu() {
                 onClick={() => navigate("/jaulas")}
                 className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
               >
-                <i className="text-xl"></i>Jaulas
+                Jaulas
               </button>
             </li>
 
             <li
-              className={`py-3 rounded-lg transition ${location.pathname.startsWith("/reportes")
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
+              className={`py-3 rounded-lg transition ${isActive("/conejos") ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
             >
               <button
-                onClick={() => navigate("/reportes")}
+                onClick={() => navigate("/conejos")}
                 className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
               >
-                <i className="text-xl"></i> Reportes
+                Conejos
+              </button>
+            </li>
+
+            <li
+              className={`py-3 rounded-lg transition ${isActive("/razas") ? "bg-blue-600" : "hover:bg-gray-700"
+                }`}
+            >
+              <button
+                onClick={() => navigate("/razas")}
+                className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
+              >
+                Razas
               </button>
             </li>
 
@@ -112,7 +122,21 @@ export default function Menu() {
                 onClick={() => navigate("/cuidados")}
                 className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
               >
-                <i className="text-xl"></i> Manejo de cuidados
+                Cuidados
+              </button>
+            </li>
+
+            <li
+              className={`py-3 rounded-lg transition ${location.pathname.startsWith("/reportes")
+                ? "bg-blue-600"
+                : "hover:bg-gray-700"
+                }`}
+            >
+              <button
+                onClick={() => navigate("/reportes")}
+                className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
+              >
+                Reportes
               </button>
             </li>
           </ul>
