@@ -1,82 +1,107 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useConejos from '../../hooks/useConejos';
+import { registrar_monta } from '../../servicios/monta_servicios';
 
 export default function GestionarMontas() {
     const navigate = useNavigate();
+    const { conejos, loading } = useConejos();
+    const [macho_id, set_macho_id] = useState('');
+    const [hembra_id, set_hembra_id] = useState('');
+    const [mensaje, set_mensaje] = useState(null);
 
-    const data = [
-        { jaula: 1, codigo: "R001", edad: 5, sexo: "hembra" },
-        { jaula: 2, codigo: "L001", edad: 4, sexo: "hembra" },
-        { jaula: 3, codigo: "L002", edad: 8, sexo: "hembra" },
-        { jaula: 4, codigo: "R003", edad: 5, sexo: "hembra" },
-    ];
+    const machos = conejos.filter(c => c.conejo_sexo === 'Macho' && c.conejo_estado === 'Saludable');
+    const hembras = conejos.filter(c => c.conejo_sexo === 'Hembra' && c.conejo_estado === 'Saludable');
+
+    const handle_submit = async (e) => {
+        e.preventDefault();
+        if (!macho_id || !hembra_id) {
+            set_mensaje({ tipo: 'error', texto: 'Seleccione un macho y una hembra' });
+            return;
+        }
+
+        const datos = {
+            macho_id,
+            hembra_id,
+            monta_fecha_monta: new Date().toISOString()
+        };
+
+        try {
+            const res = await registrar_monta(datos);
+            if (res.ok) {
+                set_mensaje({ tipo: 'success', texto: 'Monta registrada exitosamente' });
+                set_macho_id('');
+                set_hembra_id('');
+            } else {
+                const err = await res.json();
+                set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
+            }
+        } catch (error) {
+            set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
+        }
+        setTimeout(() => set_mensaje(null), 5000);
+    };
 
     return (
         <div className="min-h-screen bg-[#d8b4de] p-8 relative">
             <button onClick={() => navigate(-1)} className="absolute top-8 left-8 text-3xl text-black">
-                <i className="bi bi-arrow-left"></i> {/* Assuming bootstrap icons or similar are available, otherwise just ← */}
                 ←
             </button>
 
-            <div className="max-w-6xl mx-auto mt-12">
-                <div className="flex flex-col md:flex-row justify-between items-start mb-12">
-                    <div className="md:w-1/2">
-                        <h1 className="text-5xl font-bold mb-6 text-black">Gestionar Montas</h1>
-                        <p className="text-xl text-gray-800 mb-8">
-                            Controle registros de cría, ciclos reproductivos y el rendimiento genético de su plantel
-                        </p>
+            <div className="max-w-4xl mx-auto mt-12">
+                <h1 className="text-5xl font-bold mb-6 text-black">Gestionar Montas</h1>
+                <p className="text-xl text-gray-800 mb-8">
+                    Registre los ciclos reproductivos de su plantel.
+                </p>
 
-                        <h2 className="text-4xl font-bold text-center md:text-left mb-8 text-black">Registro</h2>
-
-                        <div className="mb-8">
-                            <label className="block text-white font-bold mb-2">Buscar por :</label>
-                            <div className="flex gap-4">
-                                <input
-                                    type="text"
-                                    placeholder="Codigo"
-                                    className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
-                                />
-                                <button className="bg-purple-700 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-purple-800 transition">
-                                    <span>★</span> Registrar
-                                </button>
-                            </div>
-                        </div>
+                {mensaje && (
+                    <div className={`mb-6 p-4 rounded-lg ${mensaje.tipo === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {mensaje.texto}
                     </div>
+                )}
 
-                    <div className="md:w-1/3 hidden md:block">
-                        <img src="https://placehold.co/400x400?text=Rabbit+Image" alt="Rabbit" className="rounded-lg shadow-lg rotate-3" />
-                    </div>
-                </div>
-
-                <div className="bg-white/50 rounded-lg p-6"> {/* Semi-transparent container for table if needed, or just on bg */}
-                    <h3 className="text-white font-bold mb-4 text-xl">Seleccionar Coneja</h3>
-                    <div className="overflow-x-auto bg-white rounded-lg shadow">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-purple-400 text-white">
-                                    <th className="p-4">Numero de Jaula</th>
-                                    <th className="p-4">Codigo</th>
-                                    <th className="p-4">Edad (meses)</th>
-                                    <th className="p-4">Sexo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((item, index) => (
-                                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                                        <td className="p-4">{item.jaula}</td>
-                                        <td className="p-4">{item.codigo}</td>
-                                        <td className="p-4">{item.edad}</td>
-                                        <td className="p-4">{item.sexo}</td>
-                                    </tr>
+                <div className="bg-white rounded-lg p-8 shadow-lg">
+                    <form onSubmit={handle_submit} className="space-y-6">
+                        <div>
+                            <label className="block text-gray-700 font-bold mb-2">Seleccionar Macho (Semental):</label>
+                            <select
+                                value={macho_id}
+                                onChange={(e) => set_macho_id(e.target.value)}
+                                className="w-full p-3 rounded-md bg-gray-100 border border-gray-300"
+                            >
+                                <option value="">Seleccione un macho...</option>
+                                {machos.map(m => (
+                                    <option key={m.conejo_id} value={m.conejo_id}>
+                                        {m.conejo_id} - {m.conejo_nombre}
+                                    </option>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                        <button className="bg-white text-purple-700 px-6 py-2 rounded-full shadow hover:bg-gray-100 transition flex items-center gap-2">
-                            <span>★</span> Mostrar todo
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-gray-700 font-bold mb-2">Seleccionar Hembra (Productora):</label>
+                            <select
+                                value={hembra_id}
+                                onChange={(e) => set_hembra_id(e.target.value)}
+                                className="w-full p-3 rounded-md bg-gray-100 border border-gray-300"
+                            >
+                                <option value="">Seleccione una hembra...</option>
+                                {hembras.map(h => (
+                                    <option key={h.conejo_id} value={h.conejo_id}>
+                                        {h.conejo_id} - {h.conejo_nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-purple-700 text-white font-bold py-3 rounded-full hover:bg-purple-800 transition shadow-lg"
+                        >
+                            {loading ? 'Procesando...' : 'Registrar Monta'}
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
