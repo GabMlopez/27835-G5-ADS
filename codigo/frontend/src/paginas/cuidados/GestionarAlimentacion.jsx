@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useConejos from '../../hooks/useConejos';
+import { registrar_alimentacion } from '../../servicios/alimentacion_servicios';
 
 export default function GestionarAlimentacion() {
     const navigate = useNavigate();
+    const { conejos, loading } = useConejos();
+    const [filtro, set_filtro] = useState('');
+    const [mensaje, set_mensaje] = useState(null);
 
-    const data = [
-        { jaula: 1, codigo: "R001", edad: 5, sexo: "hembra", peso: 1.8, heno: 17.5, hierba: 3, balanceado: 2 },
-        { jaula: 2, codigo: "L005", edad: 4, sexo: "macho", peso: 2.6, heno: 20, hierba: 2.6, balanceado: 2.5 },
-        { jaula: 3, codigo: "L002", edad: 8, sexo: "macho", peso: 3, heno: 21.5, hierba: 5, balanceado: 3 },
-        { jaula: 4, codigo: "R004", edad: 5, sexo: "macho", peso: 2.5, heno: 20, hierba: 2.6, balanceado: 2.5 },
-    ];
+    const conejos_filtrados = conejos.filter(c =>
+        c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
+        c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase())
+    );
+
+    const handle_registrar = async (conejo) => {
+        // En un sistema real, esto abriría un formulario para ingresar cantidades específicas
+        // Por ahora registraremos valores recomendados basados en el peso/edad si es necesario,
+        // o simplemente confirmamos la dieta estándar.
+
+        const datos = {
+            conejo_id: conejo.conejo_id,
+            cantidad_heno_seco: 150, // Valores de ejemplo
+            cantidad_hierba_humeda: 100,
+            cantidad_balanceado: 50
+        };
+
+        try {
+            const res = await registrar_alimentacion(datos);
+            if (res.ok) {
+                set_mensaje({ tipo: 'success', texto: `Alimentación registrada para ${conejo.conejo_nombre}` });
+            } else {
+                const err = await res.json();
+                set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
+            }
+        } catch (error) {
+            set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
+        }
+        setTimeout(() => set_mensaje(null), 5000);
+    };
 
     return (
         <div className="min-h-screen bg-[#d8b4de] p-8 relative">
@@ -25,27 +54,26 @@ export default function GestionarAlimentacion() {
                             Optimice dietas y horarios para garantizar la nutrición y el crecimiento saludable de sus conejos.
                         </p>
 
-                        <h2 className="text-4xl font-bold text-center md:text-left mb-8 text-black">Registro</h2>
-
                         <div className="mb-8">
-                            <label className="block text-white font-bold mb-2">Buscar por :</label>
+                            <label className="block text-white font-bold mb-2">Buscar Conejo:</label>
                             <div className="flex gap-4">
                                 <input
                                     type="text"
-                                    placeholder="Codigo"
+                                    value={filtro}
+                                    onChange={(e) => set_filtro(e.target.value)}
+                                    placeholder="Código o Nombre"
                                     className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
                                 />
-                                <button className="bg-purple-700 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-purple-800 transition">
-                                    <span>★</span> Registrar
-                                </button>
                             </div>
                         </div>
                     </div>
-
-                    <div className="md:w-1/3 hidden md:block">
-                        <img src="https://placehold.co/400x400?text=Rabbit+Eating" alt="Rabbit" className="rounded-lg shadow-lg" />
-                    </div>
                 </div>
+
+                {mensaje && (
+                    <div className={`mb-4 p-4 rounded-lg ${mensaje.tipo === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {mensaje.texto}
+                    </div>
+                )}
 
                 <div className="bg-white/50 rounded-lg p-6">
                     <h3 className="text-white font-bold mb-4 text-xl">Seleccionar Conejo</h3>
@@ -53,37 +81,38 @@ export default function GestionarAlimentacion() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-purple-400 text-white">
-                                    <th className="p-4">Numero de Jaula</th>
-                                    <th className="p-4">Codigo</th>
-                                    <th className="p-4">Edad (meses)</th>
-                                    <th className="p-4">Sexo</th>
+                                    <th className="p-4">Jaula</th>
+                                    <th className="p-4">Código</th>
+                                    <th className="p-4">Nombre</th>
                                     <th className="p-4">Peso (kg)</th>
-                                    <th className="p-4">Heno seco(g)</th>
-                                    <th className="p-4">Hierba húmeda(g)</th>
-                                    <th className="p-4">Balanceado (g)</th>
+                                    <th className="p-4 text-center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((item, index) => (
-                                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                                        <td className="p-4">{item.jaula}</td>
-                                        <td className="p-4">{item.codigo}</td>
-                                        <td className="p-4">{item.edad}</td>
-                                        <td className="p-4">{item.sexo}</td>
-                                        <td className="p-4">{item.peso}</td>
-                                        <td className="p-4">{item.heno}</td>
-                                        <td className="p-4">{item.hierba}</td>
-                                        <td className="p-4">{item.balanceado}</td>
-                                    </tr>
-                                ))}
+                                {loading ? (
+                                    <tr><td colSpan="5" className="p-4 text-center">Cargando...</td></tr>
+                                ) : conejos_filtrados.length === 0 ? (
+                                    <tr><td colSpan="5" className="p-4 text-center">No se encontraron conejos</td></tr>
+                                ) : (
+                                    conejos_filtrados.map((conejo) => (
+                                        <tr key={conejo.conejo_id} className="border-b border-gray-200 hover:bg-gray-50">
+                                            <td className="p-4">{conejo.jaula_id}</td>
+                                            <td className="p-4 font-bold">{conejo.conejo_id}</td>
+                                            <td className="p-4">{conejo.conejo_nombre}</td>
+                                            <td className="p-4">{conejo.conejo_peso}</td>
+                                            <td className="p-4 text-center">
+                                                <button
+                                                    onClick={() => handle_registrar(conejo)}
+                                                    className="bg-purple-700 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-800"
+                                                >
+                                                    Registrar Dieta
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
-                    </div>
-                    <p className="text-gray-700 mt-4 underline decoration-1">Si se suministró un valor diferente de comida, puede realizar el cambio de la dieta recomendada</p>
-                    <div className="flex justify-end mt-4">
-                        <button className="bg-white text-purple-700 px-6 py-2 rounded-full shadow hover:bg-gray-100 transition flex items-center gap-2">
-                            <span>★</span> Mostrar todo
-                        </button>
                     </div>
                 </div>
             </div>
