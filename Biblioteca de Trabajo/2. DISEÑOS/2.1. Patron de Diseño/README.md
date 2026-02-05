@@ -5,9 +5,10 @@ Este directorio contiene el documento de Patrón de diseño del proyecto **Hopto
 ## Fecha de inicio:
 25 de enero de 2026
 ## Responsable:
-Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
+Marcelo Pareja
 
-# Historial de Versiones de los Reporte de errores
+# Historial de Versiones del patron de diseño
 
 | Versión     | Fecha      | Responsable     |   Aprobado por                                                  |
 | ----------- | ---------- | --------------- | ------------------------------------------------------------- |
+| `Patrones_DiseñoV1.0` | 30/01/2026 | Marcelo Pareja  | La versión fue aprobada por Gabriel López |
