@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useConejos from '../../hooks/useConejos';
 import { registrar_alimentacion } from '../../servicios/alimentacion_servicios';
 import FormularioAlimentacion from '../../componentes/cuidados/FormularioAlimentacion';
+import { GrAdd } from "react-icons/gr";
 
 export default function GestionarAlimentacion() {
     const navigate = useNavigate();
@@ -19,8 +20,8 @@ export default function GestionarAlimentacion() {
     };
 
     const conejos_filtrados = conejos.filter(c =>
-        c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
-        (c.conejo_nombre && c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase()))
+        c.conejo_id.toLowerCase().includes(filtro.toLowerCase())||
+        c.jaula_id.toLowerCase().includes(filtro.toLowerCase())
     );
 
     const enviar_formulario = async (datos) => {
@@ -63,7 +64,7 @@ export default function GestionarAlimentacion() {
                                 type="text"
                                 value={filtro}
                                 onChange={(e) => set_filtro(e.target.value)}
-                                placeholder="Código o Nombre"
+                                placeholder="Código conejo o jaula"
                                 className="w-full p-3 rounded-md bg-gray-100 border-none outline-none shadow-sm focus:ring-2 focus:ring-purple-400"
                             />
                         </div>
@@ -85,7 +86,7 @@ export default function GestionarAlimentacion() {
                             <thead>
                                 <tr className="bg-purple-400 text-white">
                                     <th className="p-4">Jaula</th>
-                                    <th className="p-4">Código</th>
+                                    <th className="p-4">Conejo</th>
                                     <th className="p-4">Peso (kg)</th>
                                     <th className="p-4 text-center">Acción</th>
                                 </tr>
@@ -104,9 +105,10 @@ export default function GestionarAlimentacion() {
                                             <td className="p-4 text-center">
                                                 <button
                                                     onClick={() => handle_abrir_formulario(conejo)}
-                                                    className="bg-purple-700 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-800 transition shadow-md"
-                                                >
-                                                    Registrar Dieta
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                                                        title="Crear Alimentación"
+                                                    >
+                                                        <GrAdd />
                                                 </button>
                                             </td>
                                         </tr>
@@ -120,7 +122,7 @@ export default function GestionarAlimentacion() {
 
             {/* Modal del Formulario */}
             {mostrar_formulario && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+               <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white p-8 rounded-2xl max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh]">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-2xl font-bold text-gray-800">Alimentación: {conejo_seleccionado?.conejo_id}</h2>

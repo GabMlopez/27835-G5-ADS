@@ -2,16 +2,10 @@
 
 Este directorio contiene los archivos por versiones correspondientes a la Matriz de Historias de Usuario del proyecto **Hoptolt**
 
-## Información del ECS
-
-- **Código del ECS:** HU
-- **Nombre del ECS:** Matriz de Historias de Usuario
-- **Autor:** Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
-- **Proyecto:** Hoptolt
-- **Localización:** ```C:\27835_G5_ADS\Biblioteca de Trabajo/1. ELICITACION/1.4 Historias de Usuario/```
-- **Tipo de ECS:** Matriz
-- **Fecha de creación:** 13/12/2025
-- **ID del proyecto:** 27835_G5_ADS
+## Fecha de inicio:
+13 de diciembre de 2025
+## Responsable:
+Gabriel López, Kevin Asmal, Diego Delgado, Marcelo Pareja
 
 # Historial de Versiones de la Matriz de Historias de Usuario
 

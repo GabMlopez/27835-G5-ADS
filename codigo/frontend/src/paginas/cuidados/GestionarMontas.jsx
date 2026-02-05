@@ -73,8 +73,8 @@ export default function GestionarMontas() {
                             >
                                 <option value="">Seleccione una hembra...</option>
                                 {hembras.map(h => (
-                                    <option key={h.conejo_id} value={h.conejo_id}>
-                                        {h.conejo_id} - {h.conejo_nombre}
+                                    <option key={h.conejo_id}>
+                                        {h.conejo_id} 
                                     </option>
                                 ))}
                             </select>

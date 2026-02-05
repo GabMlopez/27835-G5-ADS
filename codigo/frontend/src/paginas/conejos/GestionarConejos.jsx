@@ -94,7 +94,7 @@ export default function GestionarConejos() {
             </div>
 
             {mostrar_formulario && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <h2 className="text-2xl font-bold mb-6 text-gray-800">
                             {conejo_editando ? 'Editar Conejo' : 'Nuevo Conejo'}

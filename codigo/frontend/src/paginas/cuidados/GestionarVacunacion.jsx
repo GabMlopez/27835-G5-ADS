@@ -17,7 +17,7 @@ export default function GestionarVacunacion() {
 
     const conejos_filtrados = conejos.filter(c =>
         c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
-        c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase())
+        c.jaula_id.toLowerCase().includes(filtro.toLowerCase())
     );
 
     // Abre el modal y guarda el conejo
@@ -98,7 +98,7 @@ export default function GestionarVacunacion() {
                         type="text"
                         value={filtro}
                         onChange={(e) => set_filtro(e.target.value)}
-                        placeholder="Código o Nombre"
+                        placeholder="Código conejo o jaula"
                         className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
                     />
                 </div>
@@ -115,8 +115,7 @@ export default function GestionarVacunacion() {
                             <thead>
                                 <tr className="bg-purple-400 text-white">
                                     <th className="p-4">Jaula</th>
-                                    <th className="p-4">Código</th>
-                                    <th className="p-4">Nombre</th>
+                                    <th className="p-4">Conejo</th>
                                     <th className="p-4 text-center">Acciones Médicas</th>
                                 </tr>
                             </thead>
@@ -130,7 +129,6 @@ export default function GestionarVacunacion() {
                                         <tr key={conejo.conejo_id} className="border-b border-gray-200 hover:bg-gray-50">
                                             <td className="p-4">{conejo.jaula_id}</td>
                                             <td className="p-4 font-bold">{conejo.conejo_id}</td>
-                                            <td className="p-4">{conejo.conejo_nombre}</td>
                                             <td className="p-4 text-center">
                                                 <div className="flex gap-2 justify-center">
                                                     <button
@@ -156,7 +154,7 @@ export default function GestionarVacunacion() {
                 </div>
                 {mostrar_modal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl">
                             <h2 className="text-2xl font-bold mb-4 text-purple-700">Registrar Vacuna</h2>
                             <p className="mb-4 text-gray-600">
@@ -196,7 +194,7 @@ export default function GestionarVacunacion() {
             )}
             {mostrar_confirmacion && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                   <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl">
                             <h2 className="text-2xl font-bold mb-4 text-purple-700">Registrar Control</h2>
                             <p className="mb-4 text-gray-600">
