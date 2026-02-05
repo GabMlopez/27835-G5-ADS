@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Menu from './componentes/menu/menu'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import ManejoCuidados from './paginas/cuidados/ManejoCuidados'
 import GestionarMontas from './paginas/cuidados/GestionarMontas'
 import GestionarAlimentacion from './paginas/cuidados/GestionarAlimentacion'
@@ -16,6 +16,7 @@ function App() {
     <>
       <Menu />
       <Routes>
+        <Route path="/" element={<Navigate to="/cuidados" replace />} />
         <Route path="/jaulas" element={<GestionarJaulas />} />
         <Route path="/conejos" element={<GestionarConejos />} />
         <Route path="/razas" element={<GestionarRazas />} />
