@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { verificar_token } = require('../auth');
+const { verificar_token } = require('../middleware/auth');
 
 const {
   totalConejos,
