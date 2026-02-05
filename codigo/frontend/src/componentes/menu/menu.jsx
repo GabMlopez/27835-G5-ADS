@@ -76,7 +76,7 @@ export default function Menu() {
 
       <nav className="bg-purple-400 text-white sticky top-0 shadow-md z-40">
         <div className="container mx-auto px-4">
-          <ul className="grid grid-cols-2 md:grid-cols-5 gap-4 py-4 text-center">
+          <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 text-center">
             <li
               className={`py-3 rounded-lg transition ${isActive("/jaulas") ? "bg-blue-600" : "hover:bg-gray-700"
                 }`}
@@ -127,19 +127,6 @@ export default function Menu() {
               </button>
             </li>
 
-            <li
-              className={`py-3 rounded-lg transition ${location.pathname.startsWith("/reportes")
-                ? "bg-blue-600"
-                : "hover:bg-gray-700"
-                }`}
-            >
-              <button
-                onClick={() => navigate("/reportes")}
-                className="w-full flex items-center justify-center gap-2 text-lg font-semibold"
-              >
-                Reportes
-              </button>
-            </li>
           </ul>
         </div>
       </nav>
