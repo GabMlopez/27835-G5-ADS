@@ -14,11 +14,7 @@ import GestionarJaulas from './paginas/jaulas/GestionarJaulas'
 import GestionarConejos from './paginas/conejos/GestionarConejos'
 import GestionarRazas from './paginas/razas/GestionarRazas'
 
-// ===== REPORTES (AGREGADO SEGURO) =====
-import ManejoReportes from './paginas/reportes/ManejoReportes'
-import ReporteAlimentacion from './paginas/reportes/ReporteAlimentacion'
-import ReporteMontas from './paginas/reportes/ReporteMontas'
-import ReporteMedico from './paginas/reportes/ReporteMedico'
+
 
 function App() {
 
@@ -39,12 +35,6 @@ function App() {
         <Route path="/cuidados/montas" element={<GestionarMontas />} />
         <Route path="/cuidados/alimentacion" element={<GestionarAlimentacion />} />
         <Route path="/cuidados/vacunacion" element={<GestionarVacunacion />} />
-
-        {/* ===== REPORTES (NUEVO) ===== */}
-        <Route path="/reportes" element={<ManejoReportes />} />
-        <Route path="/reportes/alimentacion" element={<ReporteAlimentacion />} />
-        <Route path="/reportes/montas" element={<ReporteMontas />} />
-        <Route path="/reportes/medicos" element={<ReporteMedico />} />
 
       </Routes>
     </>
