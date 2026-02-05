@@ -2,18 +2,12 @@
 
 Este directorio contiene el documento de reporte de errores e incidencias descubiertos durante las pruebas del proyecto **Hoptolt**
 
-## Información del ECS
+## Fecha de inicio:
+25 de enero de 2026
+## Responsable:
+Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
 
-- **Código del ECS:** RE
-- **Nombre del ECS:** Reporte de Errores
-- **Autor:** Marcelo Pareja
-- **Proyecto:** Hoptolt
-- **Localización:** ```C:\27835_G5_ADS\Biblioteca de Trabajo/1. ELICITACION/1.9. Reporte de Errores/```
-- **Tipo de ECS:** Documento
-- **Fecha de creación:** 25/01/2026
-- **ID del proyecto:** 27835_G5_ADS
-
-# Historial de Versiones de la Matriz de Historias de Usuario
+# Historial de Versiones de los Reporte de errores
 
 | Versión     | Fecha      | Responsable     |   Aprobado por                                                  |
 | ----------- | ---------- | --------------- | ------------------------------------------------------------- |

@@ -1,25 +1,14 @@
----
-title: Backlog
-
----
-
 # Backlog (BKL)
 
 Este directorio contiene los archivos por versiones correspondiente al código fuente  del proyecto **Hoptolt**.
 
-## Información del ECS
+## Fecha de inicio:
+09 de diciembre de 2025
+## Responsable:
+Gabriel López
 
-- **Código del ECS:** BKL
-- **Nombre del ECS:** Backlogs
-- **Autor:** Kevin Asmal, Diego Delgado, Gabriel López,Marcelo Pareja
-- **Proyecto:** Hoptolt
-- **Línea base:** LBR - Línea Base Requisitos
-- **Localización:** ```C:\27835_G5_ADS\Biblioteca Maestra/"1. ELICITACION"/"1.6 Backlog"/```
-- **Tipo de ECS:** Documento (XLSX y CSV)
-- **Fecha de creación:** 09/12/2025
-- **ID del proyecto:** 27835_G5_ADS
 
-# Historial de Versiones de
+# Historial de Versiones de Backlog
 
 | Versión     | Fecha      | Responsable     | Aprobado por                                                  |
 | ----------- | ---------- | --------------- | ------------------------------------------------------------- |

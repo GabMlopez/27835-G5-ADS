@@ -1,17 +1,13 @@
-# Reporte de Errores (RE)
+# Plan de Gestión de la Configuración (PGC)
 
-Este directorio contiene el documento de reporte de errores e incidencias descubiertos durante las pruebas del proyecto **Hoptolt**
+Este directorio contiene el documento de PGC del proyecto **Hoptolt**
 
-## Información del ECS
 
-- **Código del ECS:** PGC
-- **Nombre del ECS:** Plan de Gestión de la Configuración
-- **Autor:** Kevin Asmal, Diego Delgado, Gabriel López y Marcelo Pareja
-- **Proyecto:** Hoptolt
-- **Localización:** ```C:\27835_G5_ADS\Biblioteca de Trabajo/PGC/```
-- **Tipo de ECS:** Documento
-- **Fecha de creación:** 15/01/2026
-- **ID del proyecto:** 27835_G5_ADS
+## Fecha de inicio:
+22 de enero de 2026
+## Responsable:
+ Gabriel López, Marcelo Pareja, Kevin Asmal, Diego Delgado
+
 
 ## Historial de Versiones
 

@@ -17,7 +17,7 @@ export default function GestionarVacunacion() {
 
     const conejos_filtrados = conejos.filter(c =>
         c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
-        c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase())
+        c.jaula_id.toLowerCase().includes(filtro.toLowerCase())
     );
 
     // Abre el modal y guarda el conejo
@@ -98,7 +98,7 @@ export default function GestionarVacunacion() {
                         type="text"
                         value={filtro}
                         onChange={(e) => set_filtro(e.target.value)}
-                        placeholder="Código o Nombre"
+                        placeholder="Código conejo o jaula"
                         className="w-full p-3 rounded-md bg-gray-100 border-none outline-none"
                     />
                 </div>
@@ -115,7 +115,7 @@ export default function GestionarVacunacion() {
                             <thead>
                                 <tr className="bg-purple-400 text-white">
                                     <th className="p-4">Jaula</th>
-                                    <th className="p-4">Código</th>
+                                    <th className="p-4">Conejo</th>
                                     <th className="p-4 text-center">Acciones Médicas</th>
                                 </tr>
                             </thead>

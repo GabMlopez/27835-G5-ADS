@@ -4,7 +4,6 @@ import useConejos from '../../hooks/useConejos';
 import { registrar_alimentacion } from '../../servicios/alimentacion_servicios';
 import FormularioAlimentacion from '../../componentes/cuidados/FormularioAlimentacion';
 import { GrAdd } from "react-icons/gr";
-import { FaPencilAlt } from "react-icons/fa";
 
 export default function GestionarAlimentacion() {
     const navigate = useNavigate();
@@ -20,14 +19,9 @@ export default function GestionarAlimentacion() {
         set_mostrar_formulario(true);
     };
 
-    const handle_editar_formulario = (conejo) => {
-        set_conejo_seleccionado(conejo);
-        set_mostrar_formulario(true);
-    };
-
     const conejos_filtrados = conejos.filter(c =>
-        c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
-        (c.conejo_nombre && c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase()))
+        c.conejo_id.toLowerCase().includes(filtro.toLowerCase())||
+        c.jaula_id.toLowerCase().includes(filtro.toLowerCase())
     );
 
     const enviar_formulario = async (datos) => {
@@ -70,7 +64,7 @@ export default function GestionarAlimentacion() {
                                 type="text"
                                 value={filtro}
                                 onChange={(e) => set_filtro(e.target.value)}
-                                placeholder="Código o Nombre"
+                                placeholder="Código conejo o jaula"
                                 className="w-full p-3 rounded-md bg-gray-100 border-none outline-none shadow-sm focus:ring-2 focus:ring-purple-400"
                             />
                         </div>
@@ -92,7 +86,7 @@ export default function GestionarAlimentacion() {
                             <thead>
                                 <tr className="bg-purple-400 text-white">
                                     <th className="p-4">Jaula</th>
-                                    <th className="p-4">Código</th>
+                                    <th className="p-4">Conejo</th>
                                     <th className="p-4">Peso (kg)</th>
                                     <th className="p-4 text-center">Acción</th>
                                 </tr>
@@ -115,13 +109,6 @@ export default function GestionarAlimentacion() {
                                                         title="Crear Alimentación"
                                                     >
                                                         <GrAdd />
-                                                </button>
-                                                <button
-                                                    onClick={() => handle_editar_formulario(conejo)}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                                                        title="Editar Alimentación"
-                                                    >
-                                                        <FaPencilAlt />
                                                 </button>
                                             </td>
                                         </tr>
