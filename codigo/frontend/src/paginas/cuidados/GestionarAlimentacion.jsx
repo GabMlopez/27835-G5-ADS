@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import useConejos from '../../hooks/useConejos';
 import { registrar_alimentacion } from '../../servicios/alimentacion_servicios';
 import FormularioAlimentacion from '../../componentes/cuidados/FormularioAlimentacion';
+import { GrAdd } from "react-icons/gr";
+import { FaPencilAlt } from "react-icons/fa";
 
 export default function GestionarAlimentacion() {
     const navigate = useNavigate();
@@ -14,6 +16,11 @@ export default function GestionarAlimentacion() {
     const [enviando, set_enviando] = useState(false);
 
     const handle_abrir_formulario = (conejo) => {
+        set_conejo_seleccionado(conejo);
+        set_mostrar_formulario(true);
+    };
+
+    const handle_editar_formulario = (conejo) => {
         set_conejo_seleccionado(conejo);
         set_mostrar_formulario(true);
     };
@@ -104,9 +111,17 @@ export default function GestionarAlimentacion() {
                                             <td className="p-4 text-center">
                                                 <button
                                                     onClick={() => handle_abrir_formulario(conejo)}
-                                                    className="bg-purple-700 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-800 transition shadow-md"
-                                                >
-                                                    Registrar Dieta
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                                                        title="Crear Alimentación"
+                                                    >
+                                                        <GrAdd />
+                                                </button>
+                                                <button
+                                                    onClick={() => handle_editar_formulario(conejo)}
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                                                        title="Editar Alimentación"
+                                                    >
+                                                        <FaPencilAlt />
                                                 </button>
                                             </td>
                                         </tr>

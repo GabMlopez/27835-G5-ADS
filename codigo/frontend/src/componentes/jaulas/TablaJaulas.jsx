@@ -76,18 +76,18 @@ export default function TablaJaulas({ jaulas, on_editar, on_eliminar, loading })
                                         <button
                                             onClick={() => on_editar(jaula)}
                                             disabled={loading}
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                            title="Editar jaula"
+                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                                            title="Editar"
                                         >
-                                            ✏️ Editar
+                                            ✏️
                                         </button>
                                         <button
                                             onClick={() => confirmar_eliminacion(jaula)}
                                             disabled={loading}
-                                            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                            title="Eliminar jaula"
+                                            className="p-2 text-red-600 hover:bg-red-50 rounded"
+                                            title="Eliminar"
                                         >
-                                            🗑️ Eliminar
+                                            🗑️
                                         </button>
                                     </div>
                                 </td>
@@ -99,7 +99,7 @@ export default function TablaJaulas({ jaulas, on_editar, on_eliminar, loading })
 
             {/* Modal de confirmación de eliminación */}
             {jaula_a_eliminar && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
                         <h3 className="text-2xl font-bold mb-4 text-gray-800">Confirmar Eliminación</h3>
                         <p className="text-gray-600 mb-6">

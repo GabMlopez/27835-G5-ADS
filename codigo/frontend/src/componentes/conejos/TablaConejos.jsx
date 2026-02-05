@@ -100,7 +100,7 @@ export default function TablaConejos({ conejos, on_editar, on_eliminar, loading 
             </div>
 
             {conejo_a_eliminar && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-900/30 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
                         <h3 className="text-2xl font-bold mb-4 text-gray-800">Confirmar Eliminación</h3>
                         <p className="text-gray-600 mb-6">
