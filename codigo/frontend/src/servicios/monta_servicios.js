@@ -1,5 +1,5 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
-
+import {add} from 'date-fns';
 function obtener_token() {
     return localStorage.getItem('token');
 }
@@ -36,7 +36,15 @@ async function obtener_montas_conejo(conejo_id) {
     return res;
 }
 
+function definir_fecha_parto(){
+    const curr_date = new Date();
+    const birth_date = add(curr_date, { days: 30 });
+    const date_string = birth_date.toISOString().split('T')[0];
+    return date_string;
+}
+
 export {
     registrar_monta,
-    obtener_montas_conejo
+    obtener_montas_conejo,
+    definir_fecha_parto
 };
