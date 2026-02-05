@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useConejos from '../../hooks/useConejos';
-import { registrar_monta } from '../../servicios/monta_servicios';
+import { registrar_monta, definir_fecha_parto } from '../../servicios/monta_servicios';
 
 export default function GestionarMontas() {
     const navigate = useNavigate();
@@ -15,17 +15,18 @@ export default function GestionarMontas() {
 
     const handle_submit = async (e) => {
         e.preventDefault();
-        if (!macho_id || !hembra_id) {
-            set_mensaje({ tipo: 'error', texto: 'Seleccione un macho y una hembra' });
+        if ( !hembra_id) {
+        set_mensaje({ tipo: 'error', texto: 'Seleccione una hembra para la monta' });
             return;
         }
 
         const datos = {
-            macho_id,
-            hembra_id,
-            monta_fecha_monta: new Date().toISOString()
+            "conejo_id" : hembra_id,
+            "reproduccion_fecha" : definir_fecha_parto(),
+            "reproduccion_estado" : "Preñada"
         };
 
+        console.log(datos);
         try {
             const res = await registrar_monta(datos);
             if (res.ok) {
@@ -62,21 +63,6 @@ export default function GestionarMontas() {
 
                 <div className="bg-white rounded-lg p-8 shadow-lg">
                     <form onSubmit={handle_submit} className="space-y-6">
-                        <div>
-                            <label className="block text-gray-700 font-bold mb-2">Seleccionar Macho (Semental):</label>
-                            <select
-                                value={macho_id}
-                                onChange={(e) => set_macho_id(e.target.value)}
-                                className="w-full p-3 rounded-md bg-gray-100 border border-gray-300"
-                            >
-                                <option value="">Seleccione un macho...</option>
-                                {machos.map(m => (
-                                    <option key={m.conejo_id} value={m.conejo_id}>
-                                        {m.conejo_id} - {m.conejo_nombre}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
 
                         <div>
                             <label className="block text-gray-700 font-bold mb-2">Seleccionar Hembra (Productora):</label>

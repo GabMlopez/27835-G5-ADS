@@ -8,19 +8,19 @@ export default function ManejoCuidados() {
         {
             title: "Gestionar Montas",
             description: "Controle registros de cría, ciclos reproductivos y el rendimiento genético de su plantel.",
-            image: "https://placehold.co/600x400?text=Montas", // Placeholder
+            image: "https://media.istockphoto.com/id/1175633963/photo/this-is-a-bunny-family.jpg?s=612x612&w=0&k=20&c=GtuFg7iKFQt6mYM10zrAz-1tgZA4eFaG5517bl-L02M=", // Placeholder
             path: "/cuidados/montas"
         },
         {
             title: "Gestionar Alimentación",
             description: "Optimice dietas y horarios para garantizar la nutrición y el crecimiento saludable de sus conejos.",
-            image: "https://placehold.co/600x400?text=Alimentacion", // Placeholder
+            image: "https://cdn.mos.cms.futurecdn.net/ZWGsPrQuyyjTMAQTkqg3hj.jpg", // Placeholder
             path: "/cuidados/alimentacion"
         },
         {
             title: "Gestionar Controles Médicos",
             description: "Registre vacunas, tratamientos y revisiones para mantener un estricto control de la salud animal.",
-            image: "https://placehold.co/600x400?text=Medicos", // Placeholder
+            image: "https://www.everypaw.com/.imaging/default/dam/all-things-pet/rabbit-vaccinations/rabbit-vaccination-banner.jpg/jcr:content.jpg", // Placeholder
             path: "/cuidados/vacunacion"
         }
     ];

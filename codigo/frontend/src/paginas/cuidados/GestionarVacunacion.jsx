@@ -3,29 +3,47 @@ import { useNavigate } from 'react-router-dom';
 import useConejos from '../../hooks/useConejos';
 import { registrar_vacunacion_conejo } from '../../servicios/vacunacion_servicios';
 import { registrar_desparasitacion_conejo } from '../../servicios/desparasitacion_servicios';
+import { set } from 'date-fns';
 
 export default function GestionarVacunacion() {
     const navigate = useNavigate();
     const { conejos, loading } = useConejos();
     const [filtro, set_filtro] = useState('');
     const [mensaje, set_mensaje] = useState(null);
+    const [mostrar_modal, set_mostrar_modal] = useState(false);
+    const [mostrar_confirmacion, set_mostrar_confirmacion] = useState(false);
+    const [conejo_seleccionado, set_conejo_seleccionado] = useState(null);
+    const [tipo_vacuna, set_tipo_vacuna] = useState('Mixomatosis');
 
     const conejos_filtrados = conejos.filter(c =>
         c.conejo_id.toLowerCase().includes(filtro.toLowerCase()) ||
         c.conejo_nombre.toLowerCase().includes(filtro.toLowerCase())
     );
 
-    const handle_vacunar = async (conejo) => {
+    // Abre el modal y guarda el conejo
+    const abrir_modal_vacuna = (conejo) => {
+        set_conejo_seleccionado(conejo);
+        set_mostrar_modal(true);
+    };
+
+    const abrir_mensaje_confirmacion = (conejo) => {
+        set_conejo_seleccionado(conejo);
+        set_mostrar_confirmacion(true);
+    };
+
+    const confirmar_vacunacion = async () => {
+        if (!conejo_seleccionado) return;
+
         const datos = {
-            conejo_id: conejo.conejo_id,
-            vacunacion_tipo: 'Mixomatosis VHD',
+            conejo_id: conejo_seleccionado.conejo_id,
+            vacunacion_tipo: tipo_vacuna,
             vacunacion_fecha: new Date().toISOString()
         };
 
         try {
             const res = await registrar_vacunacion_conejo(datos);
             if (res.ok) {
-                set_mensaje({ tipo: 'success', texto: `Vacuna registrada para ${conejo.conejo_nombre}` });
+                set_mensaje({ tipo: 'success', texto: `Vacuna ${tipo_vacuna} registrada exitosamente` });
             } else {
                 const err = await res.json();
                 set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
@@ -33,20 +51,23 @@ export default function GestionarVacunacion() {
         } catch (error) {
             set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
         }
+        
+        set_mostrar_modal(false);
         setTimeout(() => set_mensaje(null), 5000);
     };
 
-    const handle_desparasitar = async (conejo) => {
+    const handle_desparasitar = async () => {
+        if (!conejo_seleccionado) return;
         const datos = {
-            conejo_id: conejo.conejo_id,
-            desparasitacion_tipo: 'Interna/Externa',
-            desparasitacion_fecha: new Date().toISOString()
+            conejo_id: conejo_seleccionado.conejo_id,
+            desparasitacion_fecha: new Date().toISOString(),
+            desparasitacion_realizada: true
         };
 
         try {
             const res = await registrar_desparasitacion_conejo(datos);
             if (res.ok) {
-                set_mensaje({ tipo: 'success', texto: `Desparasitación registrada para ${conejo.conejo_nombre}` });
+                set_mensaje({ tipo: 'success', texto: `Desparasitación registrada exitosamente` });
             } else {
                 const err = await res.json();
                 set_mensaje({ tipo: 'error', texto: err.message || 'Error al registrar' });
@@ -54,10 +75,12 @@ export default function GestionarVacunacion() {
         } catch (error) {
             set_mensaje({ tipo: 'error', texto: 'Error de conexión' });
         }
+        set_mostrar_confirmacion(false);
         setTimeout(() => set_mensaje(null), 5000);
     };
 
     return (
+
         <div className="min-h-screen bg-[#d8b4de] p-8 relative">
             <button onClick={() => navigate(-1)} className="absolute top-8 left-8 text-3xl text-black">
                 ←
@@ -111,13 +134,13 @@ export default function GestionarVacunacion() {
                                             <td className="p-4 text-center">
                                                 <div className="flex gap-2 justify-center">
                                                     <button
-                                                        onClick={() => handle_vacunar(conejo)}
+                                                        onClick={() => abrir_modal_vacuna(conejo)}
                                                         className="bg-blue-600 text-white px-4 py-2 rounded-full text-xs hover:bg-blue-700"
                                                     >
                                                         Vacunar
                                                     </button>
                                                     <button
-                                                        onClick={() => handle_desparasitar(conejo)}
+                                                        onClick={() => abrir_mensaje_confirmacion(conejo)}
                                                         className="bg-green-600 text-white px-4 py-2 rounded-full text-xs hover:bg-green-700"
                                                     >
                                                         Desparasitar
@@ -131,7 +154,80 @@ export default function GestionarVacunacion() {
                         </table>
                     </div>
                 </div>
+                {mostrar_modal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl">
+                            <h2 className="text-2xl font-bold mb-4 text-purple-700">Registrar Vacuna</h2>
+                            <p className="mb-4 text-gray-600">
+                                Seleccione el tipo de vacuna para: <strong>{conejo_seleccionado?.conejo_nombre}</strong>
+                            </p>
+                            
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Vacuna:</label>
+                                <select 
+                                    value={tipo_vacuna}
+                                    onChange={(e) => set_tipo_vacuna(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-400 outline-none"
+                                >
+                                    <option value="Mixomatosis">Mixomatosis</option>
+                                    <option value="VHD">Hemorragia Virídica(VHD)</option>
+                                </select>
+                            </div>
+
+                            <div className="flex justify-end gap-3">
+                                <button 
+                                    onClick={() => set_mostrar_modal(false)}
+                                    className="px-6 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors"
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    onClick={confirmar_vacunacion}
+                                    className="px-6 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                                >
+                                    Registrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            )}
+            {mostrar_confirmacion && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl">
+                            <h2 className="text-2xl font-bold mb-4 text-purple-700">Registrar Control</h2>
+                            <p className="mb-4 text-gray-600">
+                                <strong>Desea registrar un nuevo control de vacunación para este conejo?</strong>
+                            </p>
+                            
+        
+
+                            <div className="flex justify-end gap-3">
+                                <button 
+                                    onClick={() => set_mostrar_confirmacion(false)}
+                                    className="px-6 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors"
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    onClick={handle_desparasitar}
+                                    className="px-6 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                                >
+                                    Registrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            )}
             </div>
+
+            {/* MODAL DE VACUNACIÓN */}
+            
         </div>
     );
 }
