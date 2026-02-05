@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react';
  * @param {boolean} props.loading - Estado de carga
  */
 export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_submit, on_cancelar, loading }) {
-    const [nombre, set_nombre] = useState('');
     const [sexo, set_sexo] = useState('Macho');
     const [edad, set_edad] = useState(0);
     const [peso, set_peso] = useState(0.5);
@@ -24,7 +23,6 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
 
     useEffect(() => {
         if (conejo_inicial) {
-            set_nombre(conejo_inicial.conejo_nombre || '');
             set_sexo(conejo_inicial.conejo_sexo);
             set_edad(conejo_inicial.conejo_edad);
             set_peso(conejo_inicial.conejo_peso);
@@ -34,14 +32,13 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
             set_raza_id(conejo_inicial.conejo_raza_id);
             set_jaula_id(conejo_inicial.jaula_id);
         } else {
-            if (razas.length > 0) set_raza_id(razas[0].raza_id);
+            if (razas.length > 0) set_raza_id(razas[0].conejo_raza_id); // Fixed to match your data structure
             if (jaulas.length > 0) set_jaula_id(jaulas[0].jaula_id);
         }
     }, [conejo_inicial, razas, jaulas]);
 
     const validar = () => {
         const err = {};
-        if (!nombre.trim()) err.nombre = 'El nombre es obligatorio';
         if (!raza_id) err.raza = 'La raza es obligatoria';
         if (!jaula_id) err.jaula = 'La jaula es obligatoria';
         if (peso <= 0 || peso > 4.5) err.peso = 'El peso debe estar entre 0.1 y 4.5 kg';
@@ -58,7 +55,6 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
         }
 
         const datos = {
-            conejo_nombre: nombre,
             conejo_sexo: sexo,
             conejo_edad: parseInt(edad),
             conejo_peso: parseFloat(peso),
@@ -74,15 +70,6 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
 
     return (
         <form onSubmit={handle_submit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-                <label className="block text-gray-700 font-bold mb-1">Nombre</label>
-                <input
-                    type="text"
-                    value={nombre}
-                    onChange={(e) => set_nombre(e.target.value)}
-                    className={`w-full p-2 rounded border ${errores.nombre ? 'border-red-500' : 'border-gray-300'}`}
-                />
-            </div>
 
             <div>
                 <label className="block text-gray-700 font-bold mb-1">Sexo</label>
@@ -108,8 +95,9 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
                     type="number"
                     value={edad}
                     onChange={(e) => set_edad(e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300"
+                    className={`w-full p-2 rounded border ${errores.edad ? 'border-red-500' : 'border-gray-300'}`}
                 />
+                {errores.edad && <p className="text-red-500 text-sm mt-1">{errores.edad}</p>}
             </div>
 
             <div>
@@ -121,6 +109,7 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
                     onChange={(e) => set_peso(e.target.value)}
                     className={`w-full p-2 rounded border ${errores.peso ? 'border-red-500' : 'border-gray-300'}`}
                 />
+                {errores.peso && <p className="text-red-500 text-sm mt-1">{errores.peso}</p>}
             </div>
 
             <div>
@@ -132,7 +121,7 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
             </div>
 
             <div>
-                <label className="block text-gray-700 font-bold mb-1">Fecha Nacimiento</label>
+                <label className="block text-gray-700 font-bold mb-1">Fecha Registro</label> 
                 <input
                     type="date"
                     value={fecha_nacimiento}
@@ -143,16 +132,18 @@ export default function FormularioConejo({ conejo_inicial, razas, jaulas, on_sub
 
             <div>
                 <label className="block text-gray-700 font-bold mb-1">Raza</label>
-                <select value={raza_id} onChange={(e) => set_raza_id(e.target.value)} className="w-full p-2 rounded border border-gray-300">
-                    {razas.map(r => <option key={r.raza_id} value={r.raza_id}>{r.raza_nombre}</option>)}
+                <select value={raza_id} onChange={(e) => set_raza_id(e.target.value)} className={`w-full p-2 rounded border ${errores.raza ? 'border-red-500' : 'border-gray-300'}`}>
+                    {razas.map(r => <option key={r.conejo_raza_id} value={r.conejo_raza_id}>{r.conejo_raza_nombre}</option>)}
                 </select>
+                {errores.raza && <p className="text-red-500 text-sm mt-1">{errores.raza}</p>}
             </div>
 
             <div>
                 <label className="block text-gray-700 font-bold mb-1">Jaula</label>
-                <select value={jaula_id} onChange={(e) => set_jaula_id(e.target.value)} className="w-full p-2 rounded border border-gray-300">
+                <select value={jaula_id} onChange={(e) => set_jaula_id(e.target.value)} className={`w-full p-2 rounded border ${errores.jaula ? 'border-red-500' : 'border-gray-300'}`}>
                     {jaulas.map(j => <option key={j.jaula_id} value={j.jaula_id}>{j.jaula_id} ({j.jaula_tipo})</option>)}
                 </select>
+                {errores.jaula && <p className="text-red-500 text-sm mt-1">{errores.jaula}</p>}
             </div>
 
             <div className="md:col-span-2 flex gap-4 justify-end mt-4">

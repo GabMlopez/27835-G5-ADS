@@ -32,8 +32,8 @@ export default function FormularioRaza({ on_submit, on_cancelar, loading }) {
         }
 
         const datos = {
-            raza_nombre: nombre,
-            raza_descripcion: descripcion
+            conejo_raza_nombre: nombre,
+            conejo_raza_descripcion: descripcion
         };
 
         on_submit(datos);

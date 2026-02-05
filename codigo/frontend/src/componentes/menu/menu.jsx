@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth_context";
 import logout_modal from "../modal/logout";
-
+import { IoPerson } from "react-icons/io5";
 export default function Menu() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,6 +44,7 @@ export default function Menu() {
                 {user ? `${user.usuario}` : ""}
               </span>
               <i className="text-2xl"></i>
+              <IoPerson />
             </button>
 
             {dropdownOpen && (

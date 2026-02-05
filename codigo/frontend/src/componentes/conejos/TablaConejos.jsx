@@ -53,7 +53,6 @@ export default function TablaConejos({ conejos, on_editar, on_eliminar, loading 
                     <thead>
                         <tr className="bg-purple-400 text-white">
                             <th className="p-4">Código</th>
-                            <th className="p-4">Nombre</th>
                             <th className="p-4">Sexo</th>
                             <th className="p-4">Edad (m)</th>
                             <th className="p-4">Peso (kg)</th>
@@ -65,8 +64,8 @@ export default function TablaConejos({ conejos, on_editar, on_eliminar, loading 
                     <tbody>
                         {conejos.map((conejo) => (
                             <tr key={conejo.conejo_id} className="border-b border-gray-200 hover:bg-gray-50">
-                                <td className="p-4 font-semibold text-purple-700">{conejo.conejo_codigo}</td>
-                                <td className="p-4">{conejo.conejo_nombre}</td>
+                                <td className="p-4 font-semibold text-purple-700">{conejo.conejo_id}</td>
+
                                 <td className="p-4">
                                     <span className={`px-2 py-1 rounded-full text-xs font-bold ${conejo.conejo_sexo === 'Macho' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}`}>
                                         {conejo.conejo_sexo}
@@ -74,7 +73,7 @@ export default function TablaConejos({ conejos, on_editar, on_eliminar, loading 
                                 </td>
                                 <td className="p-4">{conejo.conejo_edad}</td>
                                 <td className="p-4">{conejo.conejo_peso}</td>
-                                <td className="p-4">{conejo.raza_id}</td>
+                                <td className="p-4">{conejo.conejo_raza_id}</td>
                                 <td className="p-4">{conejo.jaula_id}</td>
                                 <td className="p-4">
                                     <div className="flex gap-2 justify-center">

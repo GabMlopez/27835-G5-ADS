@@ -39,10 +39,10 @@ export default function TablaRazas({ razas, loading }) {
                 </thead>
                 <tbody>
                     {razas.map((raza) => (
-                        <tr key={raza.raza_id} className="border-b border-gray-200 hover:bg-gray-50">
-                            <td className="p-4 font-semibold text-purple-700">{raza.raza_id}</td>
-                            <td className="p-4 font-bold">{raza.raza_nombre}</td>
-                            <td className="p-4 text-gray-700">{raza.raza_descripcion}</td>
+                        <tr key={raza.conejo_raza_id} className="border-b border-gray-200 hover:bg-gray-50">
+                            <td className="p-4 font-semibold text-purple-700">{raza.conejo_raza_id}</td>
+                            <td className="p-4 font-bold">{raza.conejo_raza_nombre}</td>
+                            <td className="p-4 text-gray-700">{raza.conejo_raza_descripcion}</td>
                         </tr>
                     ))}
                 </tbody>

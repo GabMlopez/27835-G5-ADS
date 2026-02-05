@@ -15,7 +15,7 @@ function obtener_token() {
  */
 async function obtener_razas() {
     const token = obtener_token();
-    const res = await fetch(`${baseUrl}/raza/`, {
+    const res = await fetch(`${baseUrl}/raza`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
